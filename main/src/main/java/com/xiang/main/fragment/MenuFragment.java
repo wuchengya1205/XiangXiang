@@ -4,6 +4,10 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.MainActivity;
 import com.xiang.main.R;
@@ -67,16 +71,16 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
     }
 
     private void getPictureImage() {
-//        PictureSelector.create(this)
-//                .openGallery(PictureMimeType.ofAll())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
-//                .maxSelectNum(10)// 最大图片选择数量
-//                .minSelectNum(1)// 最小选择数量
-//                .imageSpanCount(4)// 每行显示个数
-//                .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选PictureConfig.MULTIPLE : PictureConfig.SINGLE
-//                .previewImage(true)// 是否可预览图片
-//                .isCamera(true)// 是否显示拍照按钮
-//                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-//                .forResult(PictureConfig.CHOOSE_REQUEST);
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofAll())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .maxSelectNum(10)// 最大图片选择数量
+                .minSelectNum(1)// 最小选择数量
+                .imageSpanCount(4)// 每行显示个数
+                .selectionMode(PictureConfig.MULTIPLE)// 多选 or 单选PictureConfig.MULTIPLE : PictureConfig.SINGLE
+                .previewImage(true)// 是否可预览图片
+                .isCamera(true)// 是否显示拍照按钮
+                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                .forResult(PictureConfig.CHOOSE_REQUEST);
     }
 
     @Override

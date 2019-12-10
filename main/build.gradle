@@ -38,6 +38,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation project(path: ':library')
+    //组件
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
     //沉浸式
     implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta01'
@@ -54,7 +55,6 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     //底部导航栏
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.5'
-
     //图片加载
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation "com.facebook.fresco:fresco:1.10.0"
@@ -70,6 +70,5 @@ dependencies {
     /*第三方库*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //图库
-
-//     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }
