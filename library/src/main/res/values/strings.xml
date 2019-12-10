@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">想象</string>
+    <string name="net_connect_not">当前网络不可用,请检查网络连接 </string>
+    <string name="news">新闻头条</string>
+    <string name="login">登录</string>
+    <string name="writepassword">请输入密码</string>
+    <string name="pwd">密码:</string>
+    <string name="writeuser">请输入账号(手机号码)</string>
+    <string name="user">账号:</string>
+    <string name="appcontent">跟上时代的步伐，勇往直前</string>
+    <string name="daojishi">倒计时:</string>
+    <string name="xiuxi">休息视频</string>
+</resources>

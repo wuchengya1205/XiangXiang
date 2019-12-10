@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiang.lib.base.BaseNetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/base_net"
+    tools:context="com.lib.loginandregister.LoginActivity">
+
+    <View
+        android:background="@drawable/icon_welcom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_input"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_240"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="left"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:paddingLeft="@dimen/dp_50"
+                    android:layout_width="wrap_content"
+                    android:text="@string/user"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/colorWhite"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/ed_mobile"
+                    android:layout_width="match_parent"
+                    android:minWidth="@dimen/dp_150"
+                    android:layout_marginRight="@dimen/dp_50"
+                    android:hint="@string/writeuser"
+                    android:maxLength="11"
+                    android:textColorHint="@color/colorWhite80"
+                    android:inputType="phone|number"
+                    android:textColor="@color/color_238AFF"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="left"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:paddingLeft="@dimen/dp_50"
+                    android:layout_width="wrap_content"
+                    android:text="@string/pwd"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/colorWhite"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/ed_pwd"
+                    android:layout_width="match_parent"
+                    android:minWidth="@dimen/dp_150"
+                    android:hint="@string/writepassword"
+                    android:textColorHint="@color/colorWhite80"
+                    android:inputType="textPassword"
+                    android:textColor="@color/color_238AFF"
+                    android:layout_marginRight="@dimen/dp_50"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ll_input"
+            android:layout_marginTop="@dimen/dp_80"
+            android:text="@string/login"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/shape_white80"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</com.xiang.lib.base.BaseNetLayout>

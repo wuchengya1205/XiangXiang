@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite80">#80FFFFFF</color>
+    <color name="color_000000">#000000</color>
+    <color name="color_238AFF">#238AFF</color>
+    <color name="color_red">#FFFF0000</color>
+    <color name="pointsContainerBackground">#1003A9F4</color>
+    <color name="background">#ac000000</color>
+    <color name="color_black">#000</color>
+    <color name="red">#F70909</color>
+    <color name="cheng">#FF5722</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="green">#4CAF50</color>
+    <color name="qing">#09F73D</color>
+    <color name="blue">#0988F7</color>
+    <color name="zi">#CB09F7</color>
+    <color name="dark_grey">#FF54585A</color>
+    <color name="holo_green_light">#FF99CC00</color>
+    <color name="brightly_grey">#CF9EA2A2</color>
+    <color name="tab_background">#999999</color>
+    <color name="black">#000000</color>
+
+</resources>

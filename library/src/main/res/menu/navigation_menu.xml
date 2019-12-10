@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/favorite"
+            android:icon="@mipmap/ic_launcher"
+            android:title="    会员"/>
+        <item
+            android:id="@+id/wallet"
+            android:title="    钱包"
+            android:icon="@mipmap/ic_launcher"/>
+        <item
+            android:id="@+id/photo"
+            android:title="    相册"
+            android:icon="@mipmap/ic_launcher"/>
+        <item
+            android:id="@+id/dress"
+            android:title="    装扮"
+            android:icon="@mipmap/ic_launcher"/>
+        <item
+            android:id="@+id/file"
+            android:title="    文件"
+            android:icon="@mipmap/ic_launcher" />
+
+</menu>

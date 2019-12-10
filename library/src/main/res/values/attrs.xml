@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ProgressWheel Loading-->
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean" />
+        <attr name="matProg_barColor" format="color" />
+        <attr name="matProg_rimColor" format="color" />
+        <attr name="matProg_rimWidth" format="dimension" />
+        <attr name="matProg_spinSpeed" format="float" />
+        <attr name="matProg_barSpinCycleTime" format="integer" />
+        <attr name="matProg_circleRadius" format="dimension" />
+        <attr name="matProg_fillRadius" format="boolean" />
+        <attr name="matProg_barWidth" format="dimension" />
+        <attr name="matProg_linearProgress" format="boolean" />
+    </declare-styleable>
+
+    <attr name="flakeCount" format="integer"/>
+         <attr name="minSize" format="integer"/>
+         <attr name="maxSize" format="integer"/>
+         <attr name="flakeSrc" format="reference|integer"/>
+        <attr name="speedX" format="integer"/>
+         <attr name="speedY" format="integer"/>
+
+         <declare-styleable name="Snow">
+             <attr name="flakeCount"/>
+             <attr name="minSize"/>
+             <attr name="maxSize"/>
+             <attr name="flakeSrc"/>
+            <attr name="speedX"/>
+             <attr name="speedY"/>
+         </declare-styleable>
+</resources>
