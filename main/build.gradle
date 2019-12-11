@@ -53,8 +53,8 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
-    //底部导航栏
-    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.5'
+    /*//底部导航栏
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.5'*/
     //图片加载
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation "com.facebook.fresco:fresco:1.10.0"
