@@ -1,19 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:layout_above="@+id/bottom_nav_bar"
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottom_nav_bar"
-        android:layout_alignParentBottom="true"
-        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_gravity="end|bottom"
+        android:id="@+id/fabAll"
+        app:elevation="6dp"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:backgroundTint="#fff"
+        app:rippleColor="#A71AE4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/all"
+        android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:layout_gravity="end|bottom"
+        android:id="@+id/fabNews"
+        app:elevation="6dp"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:backgroundTint="#fff"
+        app:rippleColor="#A71AE4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/news"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:layout_gravity="end|bottom"
+        android:id="@+id/fabVideo"
+        app:elevation="6dp"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:backgroundTint="#fff"
+        app:rippleColor="#A71AE4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/video"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:layout_gravity="end|bottom"
+        android:id="@+id/fabChat"
+        app:elevation="6dp"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:backgroundTint="#fff"
+        app:rippleColor="#A71AE4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/chat"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:layout_gravity="end|bottom"
+        android:id="@+id/fabOnline"
+        app:elevation="6dp"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:backgroundTint="#fff"
+        app:rippleColor="#A71AE4"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_width="wrap_content"
+        android:src="@mipmap/online"
+        android:layout_height="wrap_content"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

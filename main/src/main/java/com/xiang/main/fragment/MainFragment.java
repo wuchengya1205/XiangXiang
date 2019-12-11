@@ -1,14 +1,18 @@
 package com.xiang.main.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
@@ -20,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.ashokvarma.bottomnavigation.TextBadgeItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.xiang.lib.base.fr.BaseMvpFragment;
@@ -41,19 +46,21 @@ import com.xiang.main.video.VideoPageFragment;
  * desc   :ohuo
  * version: 1.0
  */
-public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> implements MainFContract.IView, BottomNavigationBar.OnTabSelectedListener, RefreshListener.bottom {
+@SuppressLint("RestrictedApi")
+public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> implements MainFContract.IView, RefreshListener.bottom, View.OnClickListener {
 
-    private FrameLayout main_frame;
-    private BottomNavigationBar bottom_nav_bar;
-    private TextBadgeItem badgeItem;
     private FragmentTransaction transaction;
     private Fragment mFragment;
     private NewsFragment firstPageFragment;
     private VideoPageFragment videoPageFragment;
     private ChatPageFragment chatPageFragment;
     private OnlinePageFragment onlinePageFragment;
-    private int tabPosition = 0;
-    private int sePosition = 0;
+    private FloatingActionButton fabAll;
+    private FloatingActionButton fabNews;
+    private FloatingActionButton fabVideo;
+    private FloatingActionButton fabChat;
+    private FloatingActionButton fabOnline;
+    boolean flag = false;
 
     @Override
     protected int getLayoutId() {
@@ -68,8 +75,16 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     @Override
     public void initView() {
         super.initView();
-        main_frame = view.findViewById(R.id.main_frame);
-        bottom_nav_bar = view.findViewById(R.id.bottom_nav_bar);
+        fabAll = view.findViewById(R.id.fabAll);
+        fabNews = view.findViewById(R.id.fabNews);
+        fabVideo = view.findViewById(R.id.fabVideo);
+        fabChat = view.findViewById(R.id.fabChat);
+        fabOnline = view.findViewById(R.id.fabOnline);
+        fabAll.setOnClickListener(this);
+        fabNews.setOnClickListener(this);
+        fabVideo.setOnClickListener(this);
+        fabChat.setOnClickListener(this);
+        fabOnline.setOnClickListener(this);
     }
 
     @Override
@@ -82,7 +97,6 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     @Override
     public void initData() {
         super.initData();
-        initBottomNavigationBar();
         initFragment();
     }
 
@@ -103,58 +117,100 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         initBar();
     }
 
-    private void initBottomNavigationBar() {
-        bottom_nav_bar
-                .setTabSelectedListener(this)
-                .setMode(BottomNavigationBar.MODE_FIXED)
-                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
-                .setActiveColor("#ffffff")//选中颜色
-                .setInActiveColor("#2B2B2B")//未选中颜色
-                .setBarBackgroundColor("#EDC18E");//导航栏背景色
-        badgeItem = new TextBadgeItem()
-                .setBorderWidth(3)
-                .setTextColor(Color.WHITE)
-                .setBackgroundColor(Color.RED)
-                .setText("66");
-
-        /**
-         *添加导航按钮
-         */
-        bottom_nav_bar.addItem(
-                new BottomNavigationItem(R.mipmap.frist, "首页"))
-                .addItem(new BottomNavigationItem(R.mipmap.frist, "视频").setBadgeItem(badgeItem))
-                .addItem(new BottomNavigationItem(R.mipmap.frist, "聊天").setBadgeItem(badgeItem))
-                .addItem(new BottomNavigationItem(R.mipmap.frist, "直播").setBadgeItem(badgeItem))//添加小红点数据
-                .initialise();//initialise 一定要放在 所有设置的最后一项
-    }
-
-    @Override
-    public void onTabSelected(int position) {
-        tabPosition = (position + 1);
-        sePosition = position;
-        switch (position) {
-            case 0:
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+            if (id == R.id.fabAll) {
+                if (!flag) {
+                    show();
+                } else {
+                    gone();
+                }
+            } else if (id == R.id.fabNews) {
                 switchFragment(firstPageFragment);
-                break;
-            case 1:
+            } else if (id == R.id.fabVideo) {
                 switchFragment(videoPageFragment);
-                break;
-            case 2:
+            } else if (id == R.id.fabChat) {
                 switchFragment(chatPageFragment);
-                break;
-            case 3:
+            } else if (id == R.id.fabOnline) {
                 switchFragment(onlinePageFragment);
-                break;
+            }
         }
+
+    private void gone() {
+        AnimatorSet animatorSet = new AnimatorSet();
+
+        ObjectAnimator objectAnimator10 = ObjectAnimator.ofFloat(fabNews,"translationX",-100f,0f);
+        ObjectAnimator objectAnimator20= ObjectAnimator.ofFloat(fabNews,"rotation",0f,360f);
+        ObjectAnimator objectAnimator30= ObjectAnimator.ofFloat(fabNews,"alpha",1f,0f);
+
+        ObjectAnimator translationX20 = ObjectAnimator.ofFloat(fabVideo,"translationX",-50f,0f);
+        ObjectAnimator translationY21 = ObjectAnimator.ofFloat(fabVideo,"translationY",-50f,0f);
+        ObjectAnimator rotation22 = ObjectAnimator.ofFloat(fabVideo,"rotation",0f,360f);
+        ObjectAnimator alpha23 = ObjectAnimator.ofFloat(fabVideo,"alpha",1f,0f);
+
+        ObjectAnimator translationX30 = ObjectAnimator.ofFloat(fabChat,"translationX",-100f,0f);
+        ObjectAnimator translationY31 = ObjectAnimator.ofFloat(fabChat,"translationY",-100f,0f);
+        ObjectAnimator rotation32 = ObjectAnimator.ofFloat(fabChat,"rotation",0f,360f);
+        ObjectAnimator alpha33 = ObjectAnimator.ofFloat(fabChat,"alpha",1f,0f);
+
+        ObjectAnimator objectAnimator40 = ObjectAnimator.ofFloat(fabOnline,"translationY",-100f,0f);
+        ObjectAnimator objectAnimator41= ObjectAnimator.ofFloat(fabOnline,"rotation",0f,360f);
+        ObjectAnimator objectAnimator42= ObjectAnimator.ofFloat(fabOnline,"alpha",1f,0f);
+
+        animatorSet.play(objectAnimator10).with(objectAnimator20).with(objectAnimator30)
+                .with(translationX20).with(translationY21).with(rotation22).with(alpha23)
+                .with(translationX30).with(translationY31).with(rotation32).with(alpha33)
+                .with(objectAnimator40).with(objectAnimator41).with(objectAnimator42);
+        animatorSet.start();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                flag = false;
+                fabNews.setVisibility(View.GONE);
+                fabVideo.setVisibility(View.GONE);
+                fabChat.setVisibility(View.GONE);
+                fabOnline.setVisibility(View.GONE);
+            }
+        });
     }
 
-    @Override
-    public void onTabUnselected(int position) {
+    private void show() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        fabNews.setVisibility(View.VISIBLE);
+        fabVideo.setVisibility(View.VISIBLE);
+        fabChat.setVisibility(View.VISIBLE);
+        fabOnline.setVisibility(View.VISIBLE);
+        ObjectAnimator objectAnimator10 = ObjectAnimator.ofFloat(fabNews,"translationX",0f,-100f);
+        ObjectAnimator objectAnimator20= ObjectAnimator.ofFloat(fabNews,"rotation",0f,360f);
+        ObjectAnimator objectAnimator30= ObjectAnimator.ofFloat(fabNews,"alpha",0f,1f);
 
-    }
+        ObjectAnimator translationX20 = ObjectAnimator.ofFloat(fabVideo,"translationX",0f,-50f);
+        ObjectAnimator translationY21 = ObjectAnimator.ofFloat(fabVideo,"translationY",0f,-50f);
+        ObjectAnimator rotation22 = ObjectAnimator.ofFloat(fabVideo,"rotation",0f,360f);
+        ObjectAnimator alpha23 = ObjectAnimator.ofFloat(fabVideo,"alpha",0f,1f);
 
-    @Override
-    public void onTabReselected(int position) {
+        ObjectAnimator translationX30 = ObjectAnimator.ofFloat(fabChat,"translationX",0f,-100f);
+        ObjectAnimator translationY31 = ObjectAnimator.ofFloat(fabChat,"translationY",0f,-100f);
+        ObjectAnimator rotation32 = ObjectAnimator.ofFloat(fabChat,"rotation",0f,360f);
+        ObjectAnimator alpha33 = ObjectAnimator.ofFloat(fabChat,"alpha",0f,1f);
+
+        ObjectAnimator objectAnimator40 = ObjectAnimator.ofFloat(fabOnline,"translationY",0f,-100f);
+        ObjectAnimator objectAnimator41= ObjectAnimator.ofFloat(fabOnline,"rotation",0f,360f);
+        ObjectAnimator objectAnimator42= ObjectAnimator.ofFloat(fabOnline,"alpha",0f,1f);
+
+        animatorSet.play(objectAnimator10).with(objectAnimator20).with(objectAnimator30)
+                .with(translationX20).with(translationY21).with(rotation22).with(alpha23)
+                .with(translationX30).with(translationY31).with(rotation32).with(alpha33)
+                .with(objectAnimator40).with(objectAnimator41).with(objectAnimator42);
+        animatorSet.start();
+
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                flag = true;
+            }
+        });
 
     }
 
@@ -187,8 +243,8 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         ImmersionBar.with(this).destroy();
     }
 
-    public void Refresh() {
-        View at = bottom_nav_bar.getChildAt(sePosition);
+   /* public void Refresh() {
+        View at = fabAll.getChildAt(sePosition);
         Resources resources = this.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         int width = dm.widthPixels;
@@ -237,7 +293,7 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         set.play(valueAnimator);
         set.setDuration(800);
         set.start();
-    }
+    }*/
 
     public int dip2px(Context context, float dipValue) {
         return (int) (dipValue * (getScreenDensity(context) / 160f) + 0.5f);
@@ -254,7 +310,7 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
 
     @Override
     public void finishRefresh() {
-        Refresh();
+//        Refresh();
     }
 
 
@@ -262,4 +318,6 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     public void finishLoadMore() {
 
     }
+
+
 }
