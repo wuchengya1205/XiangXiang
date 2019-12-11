@@ -18,5 +18,7 @@ public class ARouterPath {
 
     public static final String ROUTER_MAIN= "/mian/mainPage";
 
+    public static final String ROUTER_INFO = "/main/info";
+
 
 }

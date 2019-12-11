@@ -1,14 +1,18 @@
 package com.lib.loginandregister.presenter;
 
 
+import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.lib.loginandregister.contract.LoginContract;
 import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.BaseMvpPresenter;
 import com.xiang.lib.base.BaseObserverTC;
+import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.IHttpProtocol;
+import com.xiang.lib.utils.SPUtils;
 
 import net.ljb.kt.client.HttpFactory;
 import java.util.HashMap;
@@ -32,7 +36,7 @@ public class LoginPresenter extends BaseMvpPresenter<LoginContract.IView> implem
         loginNet(phone, password);
     }
 
-    private void loginNet(String phone, String password) {
+    private void loginNet(String phone, final String password) {
         HashMap<String, String> map = new HashMap<>();
         map.put("mobile", phone);
         map.put("password", password);
@@ -45,6 +49,10 @@ public class LoginPresenter extends BaseMvpPresenter<LoginContract.IView> implem
                     @Override
                     protected void onNextEx(@NonNull LoginBean data) {
                         Log.i("net","--------" + data);
+                        SPUtils.getInstance().put(Constant.SPKey_USERINFO,new Gson().toJson(data));
+                        SPUtils.getInstance().put(Constant.SPKey_UID,data.getUid());
+                        SPUtils.getInstance().put(Constant.SPKey_PHONE,data.getMobile());
+                        SPUtils.getInstance().put(Constant.SPKey_PWD,password);
                         getMvpView().loginSuccess();
                     }
 

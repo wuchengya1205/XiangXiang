@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.coder.circlebar.CircleBar;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
@@ -140,6 +141,22 @@ public abstract class BaseMvpFragment<P extends IPresenterContract> extends MvpF
 
     public void goActivity(Class cls){
         goActivity(cls,null);
+    }
+
+    public void goActivity(String arPath){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .navigation();
+    }
+
+    public void goActivity(String arPath,int code){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .navigation(getActivity(),code);
     }
 
     public void goActivity(Class cls,Bundle bundle){

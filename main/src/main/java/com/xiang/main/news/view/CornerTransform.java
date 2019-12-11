@@ -60,4 +60,8 @@ public class CornerTransform extends BitmapTransformation {
     }
 
 
+    @Override
+    public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+
+    }
 }

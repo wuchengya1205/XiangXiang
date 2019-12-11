@@ -21,6 +21,10 @@ public interface IHttpProtocol {
     @FormUrlEncoded
     Observable<BaseResponseTC<LoginBean>> login(@FieldMap HashMap<String, String> map);
 
+    @POST("updateUserInfo")
+    @FormUrlEncoded
+    Observable<BaseResponseTC<String>> updateUserInfo(@FieldMap HashMap<String, String> map);
+
     @POST("")
     @FormUrlEncoded
     Observable<BaseResponse<CommonBean>> getData(@Url String url, @FieldMap HashMap<String, String> map);

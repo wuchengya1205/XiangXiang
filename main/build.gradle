@@ -70,5 +70,5 @@ dependencies {
     /*第三方库*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //图库
-     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 }

@@ -15,17 +15,22 @@
         android:layout_height="30dp"/>
 
     <LinearLayout
+        android:id="@+id/linear_info"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
         android:layout_height="60dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_icon"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="60dp"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_launcher_round"
-            android:layout_height="match_parent"/>
+            android:layout_marginLeft="30dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/icon_user_man"
+            app:civ_border_width="2dp"
+            android:scaleType="centerCrop"
+            app:civ_border_color="#FF000000"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -34,6 +39,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_weight="1"
                 android:text="名字"
                 android:gravity="center_vertical"
@@ -46,6 +52,7 @@
                 android:layout_height="0dp"/>
 
             <TextView
+                android:id="@+id/tv_sign"
                 android:layout_weight="1"
                 android:text="签名"
                 android:gravity="center_vertical"
