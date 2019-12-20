@@ -16,7 +16,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.R;
-import com.xiang.main.listener.RefreshListener;
 import com.xiang.main.news.contract.NewsContract;
 import com.xiang.main.news.presenter.NewsPresenter;
 import com.xiang.main.news.view.BannerViewPager;
@@ -40,10 +39,6 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
     private ViewPager mViewPager;
     private BannerViewPager mBanner;
     private static SmartRefreshLayout smart_refresh;
-    private static RefreshListener.bottom mLoadMoreListener;
-    private static RefreshListener.top mRefreshListener;
-    private static Boolean isRefresh = true; // 是刷新还是加载更多
-    private static Boolean isCreate = false;  // 刷新完是否开启贝塞尔曲线
 
     @Override
     protected int getLayoutId() {
@@ -124,23 +119,12 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        if (mRefreshListener != null) {
-            mRefreshListener.refresh();
-            refreshLayout.finishRefresh(3000);
-
-        }
-        isRefresh = true;
-        isCreate = true;
+        refreshLayout.finishRefresh(3000);
     }
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        if (mRefreshListener != null) {
-            mRefreshListener.loadMore();
-            refreshLayout.finishLoadMore(3000);
-        }
-        isRefresh = false;
-        isCreate = true;
+        refreshLayout.finishLoadMore(3000);
     }
 
     @Override
@@ -150,7 +134,7 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
 
     @Override
     public void onPageSelected(int position) {
-        isCreate = false;
+
     }
 
     @Override
@@ -160,7 +144,7 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        isCreate = false;
+
     }
 
     @Override
@@ -202,47 +186,9 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
 
     }
 
-    public void setOnRefreshLoadMoreListener(RefreshListener.bottom listener) {
-        mLoadMoreListener = listener;
-    }
-
-    public static void setOnRefreshLoadMoreListener(RefreshListener.top listener) {
-        mRefreshListener = listener;
-    }
-
-    public static void finish() {
-
-        if (isCreate) {
-            if (isRefresh) {
-                if (mLoadMoreListener != null) {
-                    mLoadMoreListener.finishRefresh();
-                    smart_refresh.finishRefresh();
-                }
-            }
-            if (!isRefresh) {
-                if (mLoadMoreListener != null) {
-                    mLoadMoreListener.finishLoadMore();
-                    smart_refresh.finishLoadMore();
-                }
-            }
-        }
-
-    }
-
-    public static void finishNo(){
-        if (isRefresh) {
-            smart_refresh.finishRefresh();
-        }
-        if (!isRefresh) {
-            smart_refresh.finishLoadMore();
-        }
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mLoadMoreListener = null;
-        mRefreshListener = null;
         smart_refresh = null;
     }
 }

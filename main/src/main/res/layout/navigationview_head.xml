@@ -222,6 +222,34 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linear_logout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon_menu_finish"
+            android:padding="3dp"
+            android:layout_height="30dp"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:text="退出登录"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:padding="2dp"
+            android:textSize="14sp"
+            android:textColor="@color/color_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

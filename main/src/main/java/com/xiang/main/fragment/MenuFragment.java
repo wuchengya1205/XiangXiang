@@ -19,6 +19,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.fr.BaseMvpFragment;
+import com.xiang.lib.utils.ActivityUtils;
 import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.MainActivity;
@@ -52,6 +53,7 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
     private TextView tv_name;
     private TextView tv_sign;
     private LinearLayout linear_info;
+    private LinearLayout linear_logout;
 
     @Override
     protected int getLayoutId() {
@@ -70,6 +72,7 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
         tv_name = view.findViewById(R.id.tv_name);
         tv_sign = view.findViewById(R.id.tv_sign);
         linear_info = view.findViewById(R.id.linear_info);
+        linear_logout = view.findViewById(R.id.linear_logout);
     }
 
     @Override
@@ -79,6 +82,7 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
         sw_voice.setOnCheckedChangeListener(this);
         sw_shake.setOnCheckedChangeListener(this);
         linear_info.setOnClickListener(this);
+        linear_logout.setOnClickListener(this);
     }
 
     @Override
@@ -106,6 +110,14 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
         }
         if (v.getId() == R.id.linear_info) {
             goActivity(ARouterPath.ROUTER_INFO);
+        }
+        if (v.getId() == R.id.linear_logout){
+            goActivity(ARouterPath.ROUTER_LOGIN);
+            ActivityUtils.getInstance().popAllActivity();
+            SPUtils.getInstance().put(Constant.SPKey_PWD,"");
+            SPUtils.getInstance().put(Constant.SPKey_PHONE,"");
+            SPUtils.getInstance().put(Constant.SPKey_UID,"");
+            SPUtils.getInstance().put(Constant.SPKey_USERINFO,"");
         }
     }
 

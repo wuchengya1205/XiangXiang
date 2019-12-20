@@ -17,6 +17,8 @@ import com.xiang.lib.base.BaseNetLayout;
 import com.xiang.lib.base.LoadingDialog;
 import com.xiang.lib.base.NetBroadcastReceiver;
 import com.xiang.lib.base.NetChangeListener;
+import com.xiang.lib.utils.ActivityUtils;
+
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.view.MvpActivity;
 import static android.view.View.GONE;
@@ -35,6 +37,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        ActivityUtils.getInstance().pushActivity(this);
         init(savedInstanceState);
         initView();
         initData();
@@ -183,6 +186,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
         super.onDestroy();
         ImmersionBar.with(this).destroy();
         dismissLoading();
+        ActivityUtils.getInstance().popActivity(this);
         if (mLoading != null){
             mLoading = null;
         }

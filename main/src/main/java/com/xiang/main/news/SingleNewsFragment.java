@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xiang.lib.allbean.CommonBean;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.R;
-import com.xiang.main.listener.RefreshListener;
 import com.xiang.main.news.adapter.RecyclerListAdapter;
 import com.xiang.main.news.contract.SingleNewsContract;
 import com.xiang.main.news.presenter.SingleNewsPresenter;
@@ -20,7 +19,7 @@ import java.util.List;
  * author : fengzhangwei
  * date : 2019/11/12
  */
-public class SingleNewsFragment extends BaseMvpFragment<SingleNewsContract.IPresenter> implements SingleNewsContract.IView, RefreshListener.top{
+public class SingleNewsFragment extends BaseMvpFragment<SingleNewsContract.IPresenter> implements SingleNewsContract.IView{
 
 
     public static String TAB_KEY = "tabType";
@@ -56,7 +55,6 @@ public class SingleNewsFragment extends BaseMvpFragment<SingleNewsContract.IPres
         tabType = getArguments().getString(TAB_KEY);
         recyclerListAdapter = new RecyclerListAdapter(getContext(), new ArrayList<CommonBean.DataBean>());
         mRecyclerView.setAdapter(recyclerListAdapter);
-        NewsFragment.setOnRefreshLoadMoreListener(this);
 //        lazyLoad();
     }
 
@@ -68,7 +66,6 @@ public class SingleNewsFragment extends BaseMvpFragment<SingleNewsContract.IPres
     @Override
     public void onError(String msg) {
         showToast(msg);
-        NewsFragment.finishNo();
     }
 
     @Override
@@ -76,19 +73,8 @@ public class SingleNewsFragment extends BaseMvpFragment<SingleNewsContract.IPres
         if ("1".equals(commonBean.getStat())){
             recyclerListAdapter.setData(commonBean.getData());
             List<CommonBean.DataBean> data = recyclerListAdapter.getData();
-            NewsFragment.finish();
             Log.d("TAG","----size---" + data.size());
         }
-    }
-
-    @Override
-    public void refresh() {
-        getPresenter().getNewsData();
-    }
-
-    @Override
-    public void loadMore() {
-
     }
 
     @Override

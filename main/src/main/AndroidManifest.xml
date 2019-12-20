@@ -5,6 +5,7 @@
     <application >
         <activity android:name=".UserInfoActivity" android:theme="@style/AppTheme"></activity>
         <activity android:name=".MainActivity" android:theme="@style/AppTheme"/>
+        <service  android:name="com.lib.xiangxiang.im.ImService" />
     </application>
 
 </manifest>

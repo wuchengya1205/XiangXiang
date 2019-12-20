@@ -11,8 +11,12 @@ import android.view.KeyEvent;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lib.xiangxiang.im.ImSocketClient;
+import com.lib.xiangxiang.im.SocketManager;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.base.ac.BaseActivity;
+import com.xiang.lib.utils.Constant;
+import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.fragment.MainFragment;
 import com.xiang.main.fragment.MenuFragment;
 
@@ -40,6 +44,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void initData() {
         super.initData();
         initBar();
+        String uid = Constant.TO_ID;
+        SocketManager.loginSocket(this,"uid="+uid);
         fList.add(new MenuFragment());
         fList.add(new MainFragment());
         mViewPager.setAdapter(new AccessPagerAdapter(getSupportFragmentManager()));
