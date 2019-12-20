@@ -91,9 +91,9 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_login){
-//            getPresenter().login();
-            goActivity(ARouterPath.ROUTER_MAIN);
-            finish();
+            getPresenter().login();
+//            goActivity(ARouterPath.ROUTER_MAIN);
+//            finish();
         }
     }
 

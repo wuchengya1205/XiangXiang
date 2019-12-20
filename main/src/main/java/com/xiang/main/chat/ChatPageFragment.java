@@ -78,7 +78,7 @@ public class ChatPageFragment extends BaseMvpFragment<ChatPageContract.IPresente
         if (view.getId() == R.id.btn_send) {
             final String s = ed_input.getText().toString().trim();
             ChatMessage message = new ChatMessage();
-            message.setFromId(Constant.TO_ID);
+            message.setFromId(SPUtils.getInstance().getString(Constant.SPKey_UID));
             message.setToId(Constant.FROM_ID);
             message.setBodyType(ChatMessage.MSG_BODY_TYPE_TEXT);
             message.setBody(s);

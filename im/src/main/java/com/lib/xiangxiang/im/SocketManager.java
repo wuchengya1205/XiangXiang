@@ -7,6 +7,9 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
 
+import com.xiang.lib.utils.Constant;
+import com.xiang.lib.utils.SPUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
@@ -54,6 +57,26 @@ public class SocketManager {
             msgReceiver = new msgBRCallReceiver();
             IntentFilter filter = new IntentFilter(msgBRCallReceiver.ACTION);
             appContext.registerReceiver(msgReceiver, filter);
+        }
+    }
+
+    /**
+     * 断开Socket
+     */
+    public static void logOutSocket(Context context){
+        Context appContext = context.getApplicationContext();
+        Intent intent = new Intent(appContext, ImService.class);
+        intent.putExtra(ImService.SOCKET_CMD, ImService.SOCKET_RESET);
+        startService(appContext, intent);
+        // 注销广播
+        if (brCallReceiver != null){
+            appContext.unregisterReceiver(brCallReceiver);
+            brCallReceiver = null;
+            mCallBackMap.clear();
+        }
+        if (msgReceiver != null){
+            appContext.unregisterReceiver(msgReceiver);
+            msgReceiver = null;
         }
     }
 
@@ -141,14 +164,14 @@ public class SocketManager {
             String result = intent.getStringExtra(RESULT);
             switch (intent.getAction()) {
                 case ACTION:
-                    receiverMsg(context, result);
+                    receiverMsg(result);
                     break;
                 default:
                     break;
             }
         }
 
-        private void receiverMsg(Context context, String result) {
+        private void receiverMsg(String result) {
             if (result.isEmpty()) {
                 return;
             }
@@ -157,7 +180,15 @@ public class SocketManager {
 
         private void sendEvent(String result) {
             ChatMessage chatMessage = GsonUtil.GsonToBean(result, ChatMessage.class);
-            EventBus.getDefault().postSticky(chatMessage);
+            if (chatMessage.getType() != ChatMessage.MSG_SEND_SYS){
+                EventBus.getDefault().postSticky(chatMessage);
+            }else {
+                String id = SPUtils.getInstance().getString(Constant.SPKey_UID);
+                if (!chatMessage.getFromId().equals(id)){
+                    Log.i(ImSocketClient.TAG,"------------" + chatMessage.getBody() + "------------");
+                }
+            }
+
         }
     }
 }

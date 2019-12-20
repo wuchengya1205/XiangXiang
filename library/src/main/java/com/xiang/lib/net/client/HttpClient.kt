@@ -3,6 +3,7 @@
 package com.xiang.lib.net.client
 
 import com.lib.net.HttpConfig
+import com.tencent.bugly.proguard.s
 import net.ljb.kt.client.HttpMethod
 import net.ljb.kt.interceptor.AddGlobalParamInterceptor
 import net.ljb.kt.utils.NetLog
@@ -11,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.UnsupportedEncodingException
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit

@@ -122,7 +122,6 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
 
     @Override
     public void onItemSelected(BottomBarItem bottomBarItem, int i, int i1) {
-        Log.i("ssss", "i =  " + i + "------ i1 = " + i1);
         switchFragment(list.get(i1));
     }
 }

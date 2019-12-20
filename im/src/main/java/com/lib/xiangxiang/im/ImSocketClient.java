@@ -150,7 +150,7 @@ public class ImSocketClient {
      *
      * @param context
      */
-    private static void initSocketListener(Context context) {
+    private static void initSocketListener(final Context context) {
 
         mChatListener = new SocketChatMsgListener(context);
 

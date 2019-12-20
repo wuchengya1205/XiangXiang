@@ -1,9 +1,6 @@
 package com.xiang.main;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -214,6 +211,7 @@ public class UserInfoActivity extends BaseMvpActivity<UserInfoContract.IPresente
 
     @Override
     public void onSuccess(String url) {
+        Gson gson = new Gson();
         image_url = url;
         if (url != null) {
             if (userInfo.getSex().equals("男")) {
@@ -221,6 +219,10 @@ public class UserInfoActivity extends BaseMvpActivity<UserInfoContract.IPresente
             } else {
                 Glide.with(this).load(url).apply(new RequestOptions().placeholder(R.mipmap.icon_user_woman).error(R.mipmap.icon_user_woman).centerCrop()).into(iv_icon_info);
             }
+            String json = SPUtils.getInstance().getString(Constant.SPKey_USERINFO);
+            LoginBean bean = gson.fromJson(json, LoginBean.class);
+            bean.setImageUrl(url);
+            SPUtils.getInstance().put(Constant.SPKey_USERINFO,gson.toJson(bean));
         }
         dismissLoading();
     }

@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lib.xiangxiang.im.SocketManager;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -112,12 +113,14 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
             goActivity(ARouterPath.ROUTER_INFO);
         }
         if (v.getId() == R.id.linear_logout){
+            SocketManager.logOutSocket(getContext());
             goActivity(ARouterPath.ROUTER_LOGIN);
             ActivityUtils.getInstance().popAllActivity();
             SPUtils.getInstance().put(Constant.SPKey_PWD,"");
             SPUtils.getInstance().put(Constant.SPKey_PHONE,"");
             SPUtils.getInstance().put(Constant.SPKey_UID,"");
             SPUtils.getInstance().put(Constant.SPKey_USERINFO,"");
+
         }
     }
 

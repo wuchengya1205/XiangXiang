@@ -22,6 +22,9 @@ public class ChatMessage  {
     public static int MSG_SEND_SUCCESS = 2;  // 成功
     public static int MSG_SEND_ERROR = 3;    // 失败
 
+    public static int MSG_SEND_CHAT = 1;   // 聊天
+    public static int MSG_SEND_SYS = 2;    // 通知
+
     private String fromId;
     private String toId;
     private String pid;
@@ -29,6 +32,15 @@ public class ChatMessage  {
     private String body;
     private int msgStatus;
     private Long time;
+    private int type = MSG_SEND_CHAT;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getFromId() {
         return fromId;

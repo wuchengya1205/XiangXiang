@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void initData() {
         super.initData();
         initBar();
-        String uid = Constant.TO_ID;
+        String uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
         SocketManager.loginSocket(this,"uid="+uid);
         fList.add(new MenuFragment());
         fList.add(new MainFragment());

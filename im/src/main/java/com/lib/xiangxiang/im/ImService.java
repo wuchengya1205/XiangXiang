@@ -87,7 +87,7 @@ public class ImService extends Service {
                 initSocket(intent);
                 break;
             case SOCKET_RESET:
-
+                releaseSocket();
                 break;
             case SOCKET_SEND_MSG:
                 sendMsgSocket(intent);
@@ -106,6 +106,11 @@ public class ImService extends Service {
                 break;
         }
         return START_STICKY;
+    }
+
+    private void releaseSocket() {
+        ImSocketClient.release();
+        stopSelf();
     }
 
     private void callChatMsg2UI(Intent intent) {
