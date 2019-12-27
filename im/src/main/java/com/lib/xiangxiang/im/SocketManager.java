@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.util.Log;
 
 import com.xiang.lib.utils.Constant;
@@ -180,12 +179,13 @@ public class SocketManager {
 
         private void sendEvent(String result) {
             ChatMessage chatMessage = GsonUtil.GsonToBean(result, ChatMessage.class);
-            if (chatMessage.getType() != ChatMessage.MSG_SEND_SYS){
-                EventBus.getDefault().postSticky(chatMessage);
-            }else {
-                String id = SPUtils.getInstance().getString(Constant.SPKey_UID);
-                if (!chatMessage.getFromId().equals(id)){
+            String id = SPUtils.getInstance().getString(Constant.SPKey_UID);
+            if (!chatMessage.getFromId().equals(id)){
+                if (chatMessage.getType() == ChatMessage.MSG_SEND_SYS){
+                    EventBus.getDefault().postSticky( chatMessage.getBody());
                     Log.i(ImSocketClient.TAG,"------------" + chatMessage.getBody() + "------------");
+                }else {
+                    EventBus.getDefault().postSticky(chatMessage);
                 }
             }
 

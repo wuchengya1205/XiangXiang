@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".chat.ac.AttnInfoActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/color_238AFF"
+        android:layout_height="12dp"/>
+
+    <RelativeLayout
+        android:background="@color/color_238AFF"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:src="@drawable/picture_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:padding="6dp"
+            android:layout_height="30dp"/>
+
+        <TextView
+            android:text="个人资料"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:fillViewport="true"
+            android:layout_above="@id/btn_send_msg"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_attn_icon"
+                        android:layout_width="80dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_height="80dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_attn_name"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="差一步"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:maxWidth="100dp"
+                        android:layout_toRightOf="@id/civ_attn_icon"
+                        android:layout_alignTop="@id/civ_attn_icon"
+                        android:layout_height="wrap_content"/>
+                    <ImageView
+                        android:id="@+id/iv_sex"
+                        android:layout_width="20dp"
+                        android:layout_alignTop="@id/tv_attn_name"
+                        android:layout_toRightOf="@id/tv_attn_name"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="20dp"
+                        android:src="@mipmap/icon_sex_man"
+                        android:layout_height="20dp"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_attn_context"
+                        android:layout_width="match_parent"
+                        android:layout_toRightOf="@id/civ_attn_icon"
+                        android:layout_below="@id/tv_attn_name"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:maxLines="1"
+                        android:textSize="14sp"
+                        android:layout_marginTop="16dp"
+                        android:ellipsize="end"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_attn_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:text="手机号:"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_attn_sign"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:layout_marginTop="18dp"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="签名:"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_attn_age"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:layout_marginTop="18dp"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="年龄:"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_attn_birthday"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:layout_marginTop="18dp"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="生日:"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_attn_email"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:layout_marginTop="18dp"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="邮箱:"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_send_msg"
+            android:text="发消息"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_238AFF"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="60dp"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

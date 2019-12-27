@@ -2,11 +2,12 @@ package mvp.ljb.kt.view
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import mvp.ljb.kt.contract.IPresenterContract
 import mvp.ljb.kt.contract.IViewContract
 
 
-abstract class MvpActivity<out P : IPresenterContract> : Activity(), IBaseView<P>, IViewContract {
+abstract class MvpActivity<out P : IPresenterContract> : AppCompatActivity(), IBaseView<P>, IViewContract {
 
 
     private var mPresenter: P? = null

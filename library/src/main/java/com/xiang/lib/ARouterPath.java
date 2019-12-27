@@ -20,5 +20,9 @@ public class ARouterPath {
 
     public static final String ROUTER_INFO = "/main/info";
 
+    public static final String ROUTER_USER_INFO = "/user/info";
+
+    public static final String ROUTER_CHAT = "/main/chat";
+
 
 }

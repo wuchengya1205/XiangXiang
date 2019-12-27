@@ -1,2 +1,2 @@
-include ':app', ':loginandregister', ':main', ':im', 'library'
+include ':app', ':loginandregister', ':main', ':im', 'library', ':CBEmotiosKBLibrary', ':cbkeyboardlibrary'
 rootProject.name='XiangXiang'

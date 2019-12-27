@@ -1,8 +1,5 @@
 package com.lib.xiangxiang.im;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * author : fengzhangwei
  * date : 2019/12/19
@@ -33,6 +30,15 @@ public class ChatMessage  {
     private int msgStatus;
     private Long time;
     private int type = MSG_SEND_CHAT;
+    private String conversation;
+
+    public String getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(String conversation) {
+        this.conversation = conversation;
+    }
 
     public int getType() {
         return type;

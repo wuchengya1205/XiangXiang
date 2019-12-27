@@ -13,9 +13,9 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
     private IViewContract mView;
 
     @Override
-    public final void onSubscribe( Disposable d) {
+    public final void onSubscribe(Disposable d) {
 
-        Log.i("Net","--onSubscribe---" + d);
+        Log.i("Net", "--onSubscribe---" + d);
         onSubscribeEx(d);
     }
 
@@ -23,12 +23,17 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
         mView = viewContract;
     }
 
+    public BaseObserverTC() {
+    }
+
     @Override
     public final void onNext(@NonNull BaseResponseTC<T> data) {
-        mView.dismissLoading();
-        Log.i("Net","--onNext---");
+        if (mView != null) {
+            mView.dismissLoading();
+        }
+        Log.i("Net", "--onNext---");
         int code = data.getCode();
-        if (code == 0){
+        if (code == 0) {
             onNextSN(data.getMsg());
             return;
         }
@@ -37,15 +42,19 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
 
     @Override
     public final void onError(@NonNull Throwable e) {
-        mView.dismissLoading();
-        Log.i("Net","--onError---" + e.toString());
+        if (mView != null) {
+            mView.dismissLoading();
+        }
+        Log.i("Net", "--onError---" + e.toString());
         onErrorEx(e);
     }
 
     @Override
     public final void onComplete() {
-        mView.dismissLoading();
-        Log.i("Net","--onComplete---");
+        if (mView != null) {
+            mView.dismissLoading();
+        }
+        Log.i("Net", "--onComplete---");
         onCompleteEx();
     }
 
@@ -66,7 +75,7 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
 
     }
 
-    protected void onNextSN(String msg){
+    protected void onNextSN(String msg) {
 
     }
 

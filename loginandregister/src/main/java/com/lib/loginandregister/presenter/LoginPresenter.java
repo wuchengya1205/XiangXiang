@@ -1,7 +1,6 @@
 package com.lib.loginandregister.presenter;
 
 
-import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
@@ -11,7 +10,7 @@ import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.BaseMvpPresenter;
 import com.xiang.lib.base.BaseObserverTC;
 import com.xiang.lib.utils.Constant;
-import com.xiang.lib.utils.IHttpProtocol;
+import com.xiang.lib.net.IHttpProtocol;
 import com.xiang.lib.utils.SPUtils;
 
 import net.ljb.kt.client.HttpFactory;

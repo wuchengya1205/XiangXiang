@@ -7,7 +7,7 @@ import com.xiang.lib.allbean.CommonBean;
 import com.xiang.lib.base.BaseMvpPresenter;
 import com.xiang.lib.base.BaseObserver;
 import com.xiang.lib.utils.Constant;
-import com.xiang.lib.utils.IHttpProtocol;
+import com.xiang.lib.net.IHttpProtocol;
 import com.xiang.main.news.contract.SingleNewsContract;
 
 import net.ljb.kt.client.HttpFactory;

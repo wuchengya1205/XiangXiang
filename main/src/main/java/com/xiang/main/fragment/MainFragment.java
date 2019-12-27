@@ -1,19 +1,6 @@
 package com.xiang.main.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PointF;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,12 +10,10 @@ import com.chaychan.library.BottomBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.R;
-import com.xiang.main.chat.ChatPageFragment;
+import com.xiang.main.chat.fragment.ChatPageFragment;
 import com.xiang.main.contract.MainFContract;
 import com.xiang.main.news.NewsFragment;
-import com.xiang.main.online.OnlinePageFragment;
 import com.xiang.main.presenter.MainFPresenter;
-import com.xiang.main.utils.BezierTypeEvaluator;
 import com.xiang.main.video.VideoPageFragment;
 
 import java.util.ArrayList;

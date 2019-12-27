@@ -1,9 +1,7 @@
 package com.lib.xiangxiang.im;
 
-import com.google.gson.Gson;
-import com.xiang.lib.allbean.LoginBean;
-import com.xiang.lib.utils.Constant;
-import com.xiang.lib.utils.SPUtils;
+import com.xiang.lib.chatBean.TextBody;
+import com.xiang.lib.utils.OfTenUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,5 +48,23 @@ public class ImSendMessageUtils {
                 .append(getRandomInt())
                 .append(time.substring(time.length() - 4, time.length()));
         return stringBuffer.toString();
+    }
+
+    public static String getChatMessage(String msg,String fromId,String toId,int bodyType){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("fromId",fromId);
+            object.put("toId",toId);
+            object.put("pid",getPid());
+            object.put("bodyType",bodyType);
+            object.put("body",GsonUtil.BeanToJson(new TextBody(msg)));
+            object.put("msgStatus",ChatMessage.MSG_SEND_LOADING);
+            object.put("time",System.currentTimeMillis());
+            object.put("type",ChatMessage.MSG_SEND_CHAT);
+            object.put("conversation", OfTenUtils.getConviction(fromId,toId));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
     }
 }

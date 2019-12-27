@@ -151,6 +151,15 @@ public abstract class BaseMvpFragment<P extends IPresenterContract> extends MvpF
                 .navigation();
     }
 
+    public void goActivity(String arPath,Bundle bundle){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withBundle("bundle",bundle)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .navigation();
+    }
+
     public void goActivity(String arPath,int code){
         if (arPath.isEmpty()){return;}
         ARouter.getInstance()

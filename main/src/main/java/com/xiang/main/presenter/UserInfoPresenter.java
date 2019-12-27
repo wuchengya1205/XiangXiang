@@ -10,9 +10,8 @@ import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.BaseMvpPresenter;
 import com.xiang.lib.base.BaseObserverTC;
 import com.xiang.lib.utils.Constant;
-import com.xiang.lib.utils.IHttpProtocol;
+import com.xiang.lib.net.IHttpProtocol;
 import com.xiang.lib.utils.SPUtils;
-import com.xiang.main.contract.MainFContract;
 import com.xiang.main.contract.UserInfoContract;
 
 import net.ljb.kt.client.HttpFactory;

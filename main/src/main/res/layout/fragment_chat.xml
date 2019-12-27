@@ -1,40 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/tv_context"
+
+    <View
         android:layout_width="match_parent"
-        android:layout_above="@id/ed_input"
-        android:paddingTop="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="消息显示区域:"
-        android:textSize="22sp"
-        android:paddingBottom="8dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="12dp"/>
 
-    <EditText
-        android:id="@+id/ed_input"
+   <com.google.android.material.tabs.TabLayout
+       android:id="@+id/tab_chat"
+       app:tabMode="fixed"
+       app:tabSelectedTextColor="@color/blue"
+       app:tabTextColor="@color/color_black"
+       app:tabIndicatorColor="@color/blue"
+       app:tabIndicatorFullWidth="false"
+       android:layout_width="match_parent"
+       android:layout_height="45dp">
+
+   </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_chat"
         android:layout_width="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_above="@id/btn_send"
-        android:layout_marginTop="40dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_send"
-        android:layout_width="wrap_content"
-        android:text="发送"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"/>
+    </androidx.viewpager.widget.ViewPager>
 
 
-</RelativeLayout>
+</LinearLayout>

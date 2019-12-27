@@ -6,4 +6,5 @@ package com.xiang.lib.base;
  */
 public interface NetChangeListener {
     void onChangeListener(Boolean status);
+    void onNetWorkState(int workState);
 }
