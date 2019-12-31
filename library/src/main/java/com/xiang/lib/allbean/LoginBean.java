@@ -30,7 +30,15 @@ public class LoginBean {
     private String username;
     private String uid;
     private BigDecimal money;
+    private int online;
 
+    public int getOnline() {
+        return online;
+    }
+
+    public void setOnline(int online) {
+        this.online = online;
+    }
 
     public BigDecimal getMoney() {
         return money;

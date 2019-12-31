@@ -7,6 +7,7 @@ import com.xiang.lib.base.BaseResponse;
 import com.xiang.lib.base.BaseResponseTC;
 import com.xiang.lib.allbean.CommonBean;
 import com.xiang.lib.allbean.LoginBean;
+import com.xiang.lib.chatBean.ChatMessage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,10 @@ public interface IHttpProtocol {
     @POST("info/user")
     @FormUrlEncoded
     Observable<BaseResponseTC<LoginBean>> getUserInfo(@FieldMap HashMap<String, String> map);
+
+    @POST("history/user")
+    @FormUrlEncoded
+    Observable<BaseResponseTC<List<ChatMessage>>> getHistory(@FieldMap HashMap<String, Object> map);
 
     @POST("")
     @FormUrlEncoded

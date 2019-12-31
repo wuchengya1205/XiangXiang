@@ -1,5 +1,10 @@
 package com.xiang.main.chat.contract;
 
+import com.xiang.lib.allbean.LoginBean;
+import com.xiang.lib.chatBean.ChatMessage;
+
+import java.util.List;
+
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.contract.IViewContract;
 
@@ -13,13 +18,12 @@ import mvp.ljb.kt.contract.IViewContract;
  */
 public interface ChatContract {
     interface IView extends IViewContract {
-
-
+        void onSuccessInfo(LoginBean bean);
+        void onSuccessHistory(List<ChatMessage> list);
     }
 
     interface IPresenter extends IPresenterContract {
-
-
-
+        void getUserInfo(String uid);
+        void getHistory(String conversation,int pageNo,int pageSize);
     }
 }

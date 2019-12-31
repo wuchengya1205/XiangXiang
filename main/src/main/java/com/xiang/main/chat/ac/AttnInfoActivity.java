@@ -96,7 +96,6 @@ public class AttnInfoActivity extends BaseMvpActivity<AttnInfoContract.IPresente
         getPresenter().getInfo(uid);
         btn_send_msg.setOnClickListener(this);
         iv_back.setOnClickListener(this);
-        // 0a1b2c3d4e5678
     }
 
 
@@ -109,7 +108,6 @@ public class AttnInfoActivity extends BaseMvpActivity<AttnInfoContract.IPresente
             if (!uid.isEmpty()){
                 Bundle bundle = new Bundle();
                 bundle.putString(ChatActivity.KEY_TO_UID,uid);
-                bundle.putString(ChatActivity.KEY_TO_URL,imageUrl);
                 goActivity(ARouterPath.ROUTER_CHAT,bundle);
                 finish();
             }

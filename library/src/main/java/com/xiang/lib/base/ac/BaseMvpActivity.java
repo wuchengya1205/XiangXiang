@@ -33,6 +33,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     private TextView toolbar_menu_tv;
     private ImageView toolbar_menu;
     private LoadingDialog mLoading;
+    public String BUNDLE = "bundle";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
         ARouter.getInstance()
                 .build(arPath)
                 .withTransition(R.anim.fade_in, R.anim.fade_out)
-                .withBundle("bundle",bundle)
+                .withBundle(BUNDLE,bundle)
                 .navigation();
     }
 
@@ -109,7 +110,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     public void goActivity(Class cls,Bundle bundle){
         Intent intent = new Intent( this, cls);
         if (bundle != null){
-            intent.putExtra("bundle",bundle);
+            intent.putExtra(BUNDLE,bundle);
         }
         startActivity(intent);
     }

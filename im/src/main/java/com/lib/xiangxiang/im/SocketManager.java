@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import com.xiang.lib.chatBean.ChatMessage;
 import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.SPUtils;
 

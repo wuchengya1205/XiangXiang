@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.lib.xiangxiang.im.ChatMessage;
 import com.xiang.lib.base.fr.BaseMvpFragment;
+import com.xiang.lib.chatBean.ChatMessage;
 import com.xiang.main.R;
 import com.xiang.main.chat.contract.ChatPageContract;
 import com.xiang.main.chat.presenter.ChatPagePresenter;

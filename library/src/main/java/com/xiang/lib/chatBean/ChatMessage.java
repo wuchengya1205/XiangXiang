@@ -1,10 +1,10 @@
-package com.lib.xiangxiang.im;
+package com.xiang.lib.chatBean;
 
 /**
  * author : fengzhangwei
  * date : 2019/12/19
  */
-public class ChatMessage  {
+public class ChatMessage {
 
 
     // 消息类型
@@ -22,6 +22,10 @@ public class ChatMessage  {
     public static int MSG_SEND_CHAT = 1;   // 聊天
     public static int MSG_SEND_SYS = 2;    // 通知
 
+    // 是否显示时间
+    public static int MSG_TIME_FALSE = 0;
+    public static int MSG_TIME_TRUE = 1;
+
     private String fromId;
     private String toId;
     private String pid;
@@ -31,6 +35,15 @@ public class ChatMessage  {
     private Long time;
     private int type = MSG_SEND_CHAT;
     private String conversation;
+    private int displaytime = MSG_TIME_TRUE;
+
+    public int getDisplaytime() {
+        return displaytime;
+    }
+
+    public void setDisplaytime(int displaytime) {
+        this.displaytime = displaytime;
+    }
 
     public String getConversation() {
         return conversation;

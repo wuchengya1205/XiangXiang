@@ -1,19 +1,16 @@
 package com.xiang.main.chat.fragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lib.xiangxiang.im.ChatMessage;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.allbean.AttnBean;
-import com.xiang.lib.allbean.CommonBean;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.R;
 import com.xiang.main.chat.adapter.RecyclerListAdapter;

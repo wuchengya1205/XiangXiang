@@ -24,6 +24,7 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
     }
 
     public BaseObserverTC() {
+
     }
 
     @Override
