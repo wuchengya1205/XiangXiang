@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
@@ -7,87 +7,62 @@
 
     <FrameLayout
         android:id="@+id/main_frame"
+        android:layout_above="@id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_gravity="end|bottom"
-        android:id="@+id/fabAll"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="#fff"
-        app:rippleColor="#A71AE4"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        app:pressedTranslationZ="12dp"
-        android:layout_width="wrap_content"
-        android:src="@mipmap/all"
-        android:layout_height="wrap_content"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
-        android:layout_gravity="end|bottom"
-        android:id="@+id/fabNews"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="#fff"
-        app:rippleColor="#A71AE4"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        app:pressedTranslationZ="12dp"
-        android:layout_width="wrap_content"
-        android:src="@mipmap/news"
-        android:layout_height="wrap_content"/>
+    <com.chaychan.library.BottomBarLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="60dp">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
-        android:layout_gravity="end|bottom"
-        android:id="@+id/fabVideo"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="#fff"
-        app:rippleColor="#A71AE4"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        app:pressedTranslationZ="12dp"
-        android:layout_width="wrap_content"
-        android:src="@mipmap/video"
-        android:layout_height="wrap_content"/>
+        <com.chaychan.library.BottomBarItem
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:iconNormal="@mipmap/icon_new_n"
+            app:iconSelected="@mipmap/icon_new_y"
+            app:itemText="新闻"
+            app:textColorNormal="@color/color_n"
+            app:textColorSelected="@color/color_y"
+            app:itemTextSize="10sp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
-        android:layout_gravity="end|bottom"
-        android:id="@+id/fabChat"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="#fff"
-        app:rippleColor="#A71AE4"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        app:pressedTranslationZ="12dp"
-        android:layout_width="wrap_content"
-        android:src="@mipmap/chat"
-        android:layout_height="wrap_content"/>
+        <com.chaychan.library.BottomBarItem
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:iconNormal="@mipmap/icon_video_n"
+            app:iconSelected="@mipmap/icon_video_y"
+            app:itemText="广场"
+            app:textColorNormal="@color/color_n"
+            app:textColorSelected="@color/color_y"
+            app:itemTextSize="10sp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:visibility="gone"
-        android:layout_gravity="end|bottom"
-        android:id="@+id/fabOnline"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="#fff"
-        app:rippleColor="#A71AE4"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        app:pressedTranslationZ="12dp"
-        android:layout_width="wrap_content"
-        android:src="@mipmap/online"
-        android:layout_height="wrap_content"/>
+        <com.chaychan.library.BottomBarItem
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:iconNormal="@mipmap/icon_chat_n"
+            app:iconSelected="@mipmap/icon_chat_y"
+            app:itemText="消息"
+            app:textColorNormal="@color/color_n"
+            app:textColorSelected="@color/color_y"
+            app:itemTextSize="10sp" />
+
+<!--        <com.chaychan.library.BottomBarItem-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:iconNormal="@mipmap/icon_me_n"-->
+<!--            app:iconSelected="@mipmap/icon_me_y"-->
+<!--            app:itemText="直播"-->
+<!--            app:textColorNormal="@color/color_n"-->
+<!--            app:textColorSelected="@color/color_y"-->
+<!--            app:itemTextSize="10sp" />-->
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.chaychan.library.BottomBarLayout>
+
+</RelativeLayout>

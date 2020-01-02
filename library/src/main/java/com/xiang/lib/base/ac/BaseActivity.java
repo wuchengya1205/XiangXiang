@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.xiang.lib.utils.ActivityUtils;
+
 
 public abstract class BaseActivity extends FragmentActivity {
 
@@ -14,6 +16,7 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         init(savedInstanceState);
+        ActivityUtils.getInstance().pushActivity(this);
         initView();
         initData();
     }
@@ -42,6 +45,11 @@ public abstract class BaseActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityUtils.getInstance().popActivity(this);
+    }
 
     protected abstract int getLayoutId();
 }

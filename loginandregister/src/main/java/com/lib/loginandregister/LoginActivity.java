@@ -16,6 +16,7 @@ import com.xiang.lib.ARouterPath;
 import com.xiang.lib.application.BaseApplication;
 import com.xiang.lib.utils.Constant;
 import com.xiang.lib.base.ac.BaseMvpActivity;
+import com.xiang.lib.utils.SPUtils;
 
 @Route(path = ARouterPath.ROUTER_LOGIN)
 public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> implements LoginContract.IView, View.OnClickListener  {
@@ -31,12 +32,8 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
 
     @Override
     public void loginSuccess() {
-        ARouter.getInstance()
-                .build(ARouterPath.ROUTER_MAIN)
-                .withTransition(R.anim.fade_in, R.anim.fade_out)
-                .navigation();
-        finish();
-        finish();
+       goActivity(ARouterPath.ROUTER_MAIN);
+       finish();
     }
 
     @Override
@@ -61,6 +58,21 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        showLoading();
+        String m = SPUtils.getInstance().getString(Constant.SPKey_PHONE);
+        String p = SPUtils.getInstance().getString(Constant.SPKey_PWD);
+        if (m.isEmpty() || p.isEmpty()){
+            dismissLoading();
+            return;
+        }
+        mobile.setText(m);
+        password.setText(p);
+        getPresenter().login();
+    }
+
+    @Override
     public void initView() {
         super.initView();
         mobile = findViewById(R.id.ed_mobile);
@@ -80,10 +92,7 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
     public void onClick(View v) {
         if (v.getId() == R.id.btn_login){
 //            getPresenter().login();
-            ARouter.getInstance()
-                    .build(ARouterPath.ROUTER_MAIN)
-                    .withTransition(R.anim.fade_in, R.anim.fade_out)
-                    .navigation();
+            goActivity(ARouterPath.ROUTER_MAIN);
             finish();
         }
     }

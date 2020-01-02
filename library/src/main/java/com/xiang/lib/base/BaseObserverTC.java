@@ -26,7 +26,7 @@ public abstract class BaseObserverTC<T> implements Observer<BaseResponseTC<T>> {
     @Override
     public final void onNext(@NonNull BaseResponseTC<T> data) {
         mView.dismissLoading();
-        Log.i("Net","--onNext---" + data.toString());
+        Log.i("Net","--onNext---");
         int code = data.getCode();
         if (code == 0){
             onNextSN(data.getMsg());

@@ -5,24 +5,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gyf.barlibrary.BarHide;
+import com.chaychan.library.BottomBarItem;
+import com.chaychan.library.BottomBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.main.R;
-import com.xiang.main.listener.RefreshListener;
 import com.xiang.main.chat.ChatPageFragment;
 import com.xiang.main.contract.MainFContract;
 import com.xiang.main.news.NewsFragment;
-import com.xiang.main.online.OnlinePageFragment;
 import com.xiang.main.presenter.MainFPresenter;
 import com.xiang.main.video.VideoPageFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * author : wuchengya
@@ -33,14 +30,12 @@ import com.xiang.main.video.VideoPageFragment;
  * version: 1.0
  */
 @SuppressLint("RestrictedApi")
-public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> implements MainFContract.IView, RefreshListener.bottom {
+public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> implements MainFContract.IView,BottomBarLayout.OnItemSelectedListener {
 
     private FragmentTransaction transaction;
     private Fragment mFragment;
-    private NewsFragment firstPageFragment;
-    private VideoPageFragment videoPageFragment;
-    private ChatPageFragment chatPageFragment;
-    private OnlinePageFragment onlinePageFragment;
+    private BottomBarLayout bottom_bar;
+    private List<Fragment> list = new ArrayList<>(3);
 
     @Override
     protected int getLayoutId() {
@@ -55,7 +50,6 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     @Override
     public void initView() {
         super.initView();
-
     }
 
     @Override
@@ -63,23 +57,24 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         ImmersionBar.with(this)
                 .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR) // 隐藏导航栏或者状态栏
                 .init();
+        bottom_bar = view.findViewById(R.id.bottom_bar);
     }
 
     @Override
     public void initData() {
         super.initData();
         initFragment();
+        bottom_bar.setOnItemSelectedListener(this);
     }
 
     private void initFragment() {
-        firstPageFragment = new NewsFragment();
-        videoPageFragment = new VideoPageFragment();
-        chatPageFragment = new ChatPageFragment();
-        onlinePageFragment = new OnlinePageFragment();
+        list.add(new NewsFragment());
+        list.add(new VideoPageFragment());
+        list.add(new ChatPageFragment());
+//        list.add(new OnlinePageFragment());
         transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.main_frame, firstPageFragment).commit();
-        mFragment = firstPageFragment;
-        firstPageFragment.setOnRefreshLoadMoreListener(this);
+        transaction.add(R.id.main_frame, list.get(0)).commit();
+        mFragment = list.get(0);
     }
 
     @Override
@@ -87,6 +82,7 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         super.onResume();
         initBar();
     }
+
 
     private void switchFragment(Fragment fragment) {
         //判断当前显示的Fragment是不是切换的Fragment
@@ -117,81 +113,9 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
         ImmersionBar.with(this).destroy();
     }
 
-   /* public void Refresh() {
-        View at = fabAll.getChildAt(sePosition);
-        Resources resources = this.getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        //贝塞尔结束数据点
-        int[] endPosition = new int[2];
-        at.getLocationInWindow(endPosition);
-
-        PointF startF = new PointF();
-        PointF endF = new PointF();
-        PointF controllF = new PointF();
-
-        startF.x = 0;
-        startF.y = dip2px(getContext(), 60);
-        endF.x = at.getX() / 4 * tabPosition;
-        endF.y = height-at.getY()/2;
-        controllF.x = width;
-        controllF.y = endF.y / 4;
-
-        final ImageView imageView = new ImageView(getContext());
-        main_frame.addView(imageView);
-        imageView.setImageResource(R.mipmap.xx);
-        imageView.getLayoutParams().width = dip2px(getContext(), 40);
-        imageView.getLayoutParams().height = dip2px(getContext(), 40);
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setX(0);
-        imageView.setY(height / 7);
-
-        ValueAnimator valueAnimator = ValueAnimator.ofObject(new BezierTypeEvaluator(controllF), startF, endF);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                PointF pointF = (PointF) animation.getAnimatedValue();
-                imageView.setX(pointF.x);
-                imageView.setY(pointF.y);
-            }
-        });
-
-
-        ObjectAnimator objectAnimatorX = new ObjectAnimator().ofFloat(at, "scaleX", 0.8f, 1.0f);
-        ObjectAnimator objectAnimatorY = new ObjectAnimator().ofFloat(at, "scaleY", 0.8f, 1.0f);
-        objectAnimatorX.setInterpolator(new AccelerateInterpolator());
-        objectAnimatorY.setInterpolator(new AccelerateInterpolator());
-        AnimatorSet set = new AnimatorSet();
-//        set.play(objectAnimatorX).with(objectAnimatorY).after(valueAnimator);
-        set.play(valueAnimator);
-        set.setDuration(800);
-        set.start();
-    }*/
-
-    public int dip2px(Context context, float dipValue) {
-        return (int) (dipValue * (getScreenDensity(context) / 160f) + 0.5f);
-    }
-
-    @SuppressWarnings("deprecation")
-    public int getScreenDensity(Context context) {
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.densityDpi;
-
-    }
-
 
     @Override
-    public void finishRefresh() {
-//        Refresh();
+    public void onItemSelected(BottomBarItem bottomBarItem, int i, int i1) {
+        switchFragment(list.get(i1));
     }
-
-
-    @Override
-    public void finishLoadMore() {
-
-    }
-
-
 }

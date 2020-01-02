@@ -17,9 +17,13 @@ import retrofit2.http.Url;
 
 
 public interface IHttpProtocol {
-    @POST("login")
+    @POST("Lg/user")
     @FormUrlEncoded
     Observable<BaseResponseTC<LoginBean>> login(@FieldMap HashMap<String, String> map);
+
+    @POST("update/user")
+    @FormUrlEncoded
+    Observable<BaseResponseTC<String>> updateUserInfo(@FieldMap HashMap<String, String> map);
 
     @POST("")
     @FormUrlEncoded

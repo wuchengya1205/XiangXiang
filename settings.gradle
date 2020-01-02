@@ -1,2 +1,2 @@
-include ':app', ':loginandregister', ':main', 'library'
+include ':app', ':loginandregister', ':main', ':im', 'library'
 rootProject.name='XiangXiang'

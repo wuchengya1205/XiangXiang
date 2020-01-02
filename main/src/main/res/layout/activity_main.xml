@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/vp_access"
     tools:context=".MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:layout_above="@+id/llin"
-        android:id="@+id/vp_access"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <LinearLayout
-        android:id="@+id/llin"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <com.jpeng.jptabbar.JPTabBar
-        android:id="@+id/tabbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        tools:ignore="MissingConstraints" />
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+</androidx.viewpager.widget.ViewPager>

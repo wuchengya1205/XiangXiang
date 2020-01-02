@@ -1,5 +1,7 @@
 package com.xiang.lib.allbean;
 
+import java.math.BigDecimal;
+
 /**
  * author : fengzhangwei
  * date : 2019/11/14
@@ -26,6 +28,25 @@ public class LoginBean {
     private int age;
     private String email;
     private String username;
+    private String uid;
+    private BigDecimal money;
+
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getBirthday() {
         return birthday;

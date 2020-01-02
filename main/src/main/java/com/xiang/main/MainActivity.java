@@ -12,12 +12,11 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
-import com.jpeng.jptabbar.JPTabBar;
-import com.jpeng.jptabbar.anno.NorIcons;
-import com.jpeng.jptabbar.anno.SeleIcons;
-import com.jpeng.jptabbar.anno.Titles;
+import com.lib.xiangxiang.im.SocketManager;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.base.ac.BaseActivity;
+import com.xiang.lib.utils.Constant;
+import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.fragment.MainFragment;
 import com.xiang.main.fragment.MenuFragment;
 
@@ -29,7 +28,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private List<Fragment> fList = new ArrayList<>(2);
     public static ViewPager mViewPager;
-    private JPTabBar tabbar;
 
     @Override
     protected int getLayoutId() {
@@ -40,28 +38,19 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void initView() {
         super.initView();
         mViewPager = findViewById(R.id.vp_access);
-        tabbar = findViewById(R.id.tabbar);
     }
-
-    @Titles
-    private static final String[] mTitles = {"新闻","视频","聊天","直播"};
-
-    @SeleIcons
-    private static final int[] mSeleIcons = {R.mipmap.news,R.mipmap.video,R.mipmap.chat,R.mipmap.online};
-
-    @NorIcons
-    private static final int[] mNormalIcons = {R.mipmap.news,R.mipmap.video,R.mipmap.chat,R.mipmap.online};
 
     @Override
     public void initData() {
         super.initData();
         initBar();
+        String uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
+        SocketManager.loginSocket(this,"uid="+uid);
         fList.add(new MenuFragment());
         fList.add(new MainFragment());
         mViewPager.setAdapter(new AccessPagerAdapter(getSupportFragmentManager()));
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setCurrentItem(1);
-        tabbar.setContainer(mViewPager);
     }
 
     @Override

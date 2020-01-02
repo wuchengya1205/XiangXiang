@@ -8,13 +8,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lib.library.R;
+import com.xiang.lib.ARouterPath;
 import com.xiang.lib.base.BaseNetLayout;
 import com.xiang.lib.base.LoadingDialog;
 import com.xiang.lib.base.NetBroadcastReceiver;
 import com.xiang.lib.base.NetChangeListener;
+import com.xiang.lib.utils.ActivityUtils;
+
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.view.MvpActivity;
 import static android.view.View.GONE;
@@ -33,6 +37,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        ActivityUtils.getInstance().pushActivity(this);
         init(savedInstanceState);
         initView();
         initData();
@@ -73,6 +78,22 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
 
     public void goActivity(Class cls) {
         goActivity(cls,null);
+    }
+
+    public void goActivity(String arPath){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .navigation();
+    }
+
+    public void goActivity(String arPath,int code){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .navigation(this,code);
     }
 
     public void goActivity(Class cls,Bundle bundle){
@@ -165,6 +186,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
         super.onDestroy();
         ImmersionBar.with(this).destroy();
         dismissLoading();
+        ActivityUtils.getInstance().popActivity(this);
         if (mLoading != null){
             mLoading = null;
         }
