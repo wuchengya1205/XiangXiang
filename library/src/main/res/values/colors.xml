@@ -23,5 +23,6 @@
     <color name="brightly_grey">#CF9EA2A2</color>
     <color name="tab_background">#999999</color>
     <color name="black">#000000</color>
+    <color name="B999999_80">#80999999</color>
 
 </resources>

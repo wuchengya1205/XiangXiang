@@ -4,6 +4,7 @@ package com.xiang.main.chat.ac;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = ARouterPath.ROUTER_CHAT)
-public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener {
+public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener {
 
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
@@ -63,6 +64,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private String conviction;
     private SmartRefreshLayout smart_refresh;
     private LinearLayoutManager layoutManager;
+    private ImageView iv_back;
 
     @Override
     protected int getLayoutId() {
@@ -78,6 +80,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     public void initView() {
         super.initView();
         EventBus.getDefault().register(this);
+        iv_back = findViewById(R.id.iv_back);
         cb_kb = findViewById(R.id.cb_kb);
         rv_chat = findViewById(R.id.rv_chat);
         tv_chat_name = findViewById(R.id.tv_chat_name);
@@ -106,8 +109,10 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         to_uid = bundle.getString(KEY_TO_UID);
         getPresenter().getUserInfo(to_uid);
         conviction = OfTenUtils.getConviction(SPUtils.getInstance().getString(Constant.SPKey_UID), to_uid);
+        showLoading();
         getPresenter().getHistory(conviction,pageNo,pageSize);
         smart_refresh.setOnRefreshListener(this);
+        iv_back.setOnClickListener(this);
     }
 
     private void initRecyclerView() {
@@ -281,6 +286,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     public void onSuccessHistory(List<com.xiang.lib.chatBean.ChatMessage> list) {
         int size = list.size();
         smart_refresh.finishRefresh();
+        dismissLoading();
         if (size > 0){
             chatAdapter.setData(list);
             layoutManager.scrollToPositionWithOffset(list.size(),0);
@@ -302,10 +308,12 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onFuncPop(int height) {
-        if (rv_isLat){
-            toLastItem();
-        }else {
-            rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+        if (chatAdapter.getData().size() > 0){
+            if (rv_isLat){
+                toLastItem();
+            }else {
+                rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+            }
         }
     }
 
@@ -320,5 +328,12 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             pageNo ++;
         }
         getPresenter().getHistory(conviction,pageNo,pageSize);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.iv_back){
+            finish();
+        }
     }
 }
