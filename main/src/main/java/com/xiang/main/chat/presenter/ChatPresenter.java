@@ -1,8 +1,6 @@
 package com.xiang.main.chat.presenter;
 
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.xiang.lib.allbean.LoginBean;
@@ -45,7 +43,6 @@ public class ChatPresenter extends BaseMvpPresenter<ChatContract.IView> implemen
 
                     @Override
                     protected void onNextEx(@NonNull LoginBean data) {
-                        Log.i("net","--------" + data.toString());
                         getMvpView().onSuccessInfo(data);
                     }
 
@@ -63,7 +60,7 @@ public class ChatPresenter extends BaseMvpPresenter<ChatContract.IView> implemen
     }
 
     @Override
-    public void getHistory(String conversation,int pageNo,int pageSize) {
+    public void getHistory(String conversation, final int pageNo, int pageSize) {
         HashMap<String,Object> map = new HashMap<>();
         map.put("uid", SPUtils.getInstance().getString(Constant.SPKey_UID));
         map.put("conversation",conversation);
@@ -83,11 +80,14 @@ public class ChatPresenter extends BaseMvpPresenter<ChatContract.IView> implemen
                     @Override
                     protected void onNextSN(String msg) {
                         super.onNextSN(msg);
+                        getMvpView().onSuccessNull();
+
                     }
 
                     @Override
                     protected void onErrorEx(@NonNull Throwable e) {
                         super.onErrorEx(e);
+                        getMvpView().onError("错误.");
                     }
                 });
     }

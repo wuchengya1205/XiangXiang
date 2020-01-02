@@ -119,9 +119,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }else {
             if (holder instanceof ChatTextSendHolder) {
+                ((ChatTextSendHolder) holder).tv_time.setVisibility(View.VISIBLE);
                 ((ChatTextSendHolder) holder).tv_time.setText(chatTime);
             }
             if (holder instanceof ChatTextReceiveHolder) {
+                ((ChatTextReceiveHolder) holder).tv_time.setVisibility(View.VISIBLE);
                 ((ChatTextReceiveHolder) holder).tv_time.setText(chatTime);
             }
         }

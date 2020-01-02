@@ -18,8 +18,10 @@ import mvp.ljb.kt.contract.IViewContract;
  */
 public interface ChatContract {
     interface IView extends IViewContract {
+        void onError(String msg);
         void onSuccessInfo(LoginBean bean);
         void onSuccessHistory(List<ChatMessage> list);
+        void onSuccessNull();
     }
 
     interface IPresenter extends IPresenterContract {

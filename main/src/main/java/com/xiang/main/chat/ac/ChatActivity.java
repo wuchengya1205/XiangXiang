@@ -2,7 +2,6 @@ package com.xiang.main.chat.ac;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -24,6 +23,9 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lib.xiangxiang.im.GsonUtil;
 import com.lib.xiangxiang.im.ImSendMessageUtils;
 import com.lib.xiangxiang.im.SocketManager;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.ac.BaseMvpActivity;
@@ -45,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = ARouterPath.ROUTER_CHAT)
-public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener {
+public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener {
 
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
@@ -59,6 +61,8 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private int pageNo = 1;
     private int pageSize = 30;
     private String conviction;
+    private SmartRefreshLayout smart_refresh;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected int getLayoutId() {
@@ -78,6 +82,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         rv_chat = findViewById(R.id.rv_chat);
         tv_chat_name = findViewById(R.id.tv_chat_name);
         tv_net_state = findViewById(R.id.tv_net_state);
+        smart_refresh = findViewById(R.id.smart_refresh);
         initRecyclerView();
         initKeyBoard();
         initOptions();
@@ -102,9 +107,12 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         getPresenter().getUserInfo(to_uid);
         conviction = OfTenUtils.getConviction(SPUtils.getInstance().getString(Constant.SPKey_UID), to_uid);
         getPresenter().getHistory(conviction,pageNo,pageSize);
+        smart_refresh.setOnRefreshListener(this);
     }
 
     private void initRecyclerView() {
+        layoutManager = new LinearLayoutManager(this);
+        rv_chat.setLayoutManager(layoutManager);
         rv_chat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -197,7 +205,6 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
-            Log.i("chat","---size---" + chatAdapter.getItemCount());
             SocketManager.sendMsgSocket(this,json,this);
         }
     }
@@ -253,11 +260,14 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     }
 
     @Override
+    public void onError(String msg) {
+        showToast(msg);
+    }
+
+    @Override
     public void onSuccessInfo(LoginBean bean) {
-        rv_chat.setLayoutManager(new LinearLayoutManager(this));
         String json = SPUtils.getInstance().getString(Constant.SPKey_USERINFO);
         LoginBean from_bean = GsonUtil.GsonToBean(json, LoginBean.class);
-        Log.i("chat","------url-------" + bean.getImageUrl());
         if (chatAdapter == null){
             chatAdapter = new ChatAdapter(new ArrayList<ChatMessage>(), this, from_bean.getImageUrl(), bean.getImageUrl());
         }
@@ -269,12 +279,24 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onSuccessHistory(List<com.xiang.lib.chatBean.ChatMessage> list) {
-        Log.i("chat","------历史记录-------" + list.size());
         int size = list.size();
-        chatAdapter.setData(list);
-        Log.i("chat","------历史记录-------" + chatAdapter.getData().size());
-//        rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+        smart_refresh.finishRefresh();
+        if (size > 0){
+            chatAdapter.setData(list);
+            layoutManager.scrollToPositionWithOffset(list.size(),0);
+        }
+        if (pageNo == 1){
+            toLastItem();
+        }
 
+    }
+
+    @Override
+    public void onSuccessNull() {
+        smart_refresh.finishRefresh();
+        if (pageNo > 1){
+            pageNo--;
+        }
     }
 
 
@@ -290,5 +312,13 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     @Override
     public void onFuncClose() {
 
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        if (chatAdapter.getData().size() > 0){
+            pageNo ++;
+        }
+        getPresenter().getHistory(conviction,pageNo,pageSize);
     }
 }
