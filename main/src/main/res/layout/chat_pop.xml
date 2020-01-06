@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:background="@drawable/shape_chat_black"
+    android:orientation="horizontal"
+    android:layout_height="45dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="转发"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+    </TextView>
+
+   <TextView
+       android:layout_width="0dp"
+       android:layout_weight="1"
+       android:text="撤回"
+       android:textColor="@color/colorWhite"
+       android:textSize="14sp"
+       android:gravity="center"
+       android:layout_height="match_parent">
+
+   </TextView>
+
+</LinearLayout>

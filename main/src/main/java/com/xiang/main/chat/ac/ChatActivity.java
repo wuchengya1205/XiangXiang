@@ -4,6 +4,7 @@ package com.xiang.main.chat.ac;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +22,10 @@ import com.codebear.keyboard.widget.FuncLayout;
 import com.codebear.keyboard.widget.RecordIndicator;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
+import com.labo.kaji.relativepopupwindow.RelativePopupWindow;
 import com.lib.xiangxiang.im.GsonUtil;
 import com.lib.xiangxiang.im.ImSendMessageUtils;
+import com.lib.xiangxiang.im.ImSocketClient;
 import com.lib.xiangxiang.im.SocketManager;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -48,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = ARouterPath.ROUTER_CHAT)
-public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener {
+public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener, ChatAdapter.ChatItem {
 
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
@@ -65,6 +68,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private SmartRefreshLayout smart_refresh;
     private LinearLayoutManager layoutManager;
     private ImageView iv_back;
+    private FrameLayout fl_socket_hint;
 
     @Override
     protected int getLayoutId() {
@@ -85,6 +89,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         rv_chat = findViewById(R.id.rv_chat);
         tv_chat_name = findViewById(R.id.tv_chat_name);
         tv_net_state = findViewById(R.id.tv_net_state);
+        fl_socket_hint = findViewById(R.id.fl_socket_hint);
         smart_refresh = findViewById(R.id.smart_refresh);
         initRecyclerView();
         initKeyBoard();
@@ -210,13 +215,24 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
-            SocketManager.sendMsgSocket(this,json,this);
+            SocketSendJson(json);
         }
+    }
+
+    private void SocketSendJson(String json){
+        SocketManager.sendMsgSocket(this,json,this);
     }
 
     private void toLastItem(){
         chatAdapter.notifyItemChanged(chatAdapter.getItemCount()-1);
         rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+    }
+
+    private void showPopWindow(View view) {
+        RelativePopupWindow popupWindow = new RelativePopupWindow();
+        popupWindow.setContentView(View.inflate(this,R.layout.chat_pop,null));
+        popupWindow.setFocusable(true);
+        popupWindow.showOnAnchor(view, RelativePopupWindow.VerticalPosition.ABOVE, RelativePopupWindow.HorizontalPosition.CENTER);
     }
 
     @Override
@@ -264,9 +280,38 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void socketError(String msg) {
+        if (fl_socket_hint != null){
+            if (ImSocketClient.checkSocket()){
+                if (fl_socket_hint.getVisibility() == View.VISIBLE){
+                    fl_socket_hint.setVisibility(View.GONE);
+                }
+                List<ChatMessage> data = chatAdapter.getData();
+                int size = chatAdapter.getData().size();
+                for (int i=0;i<size;i++){
+                    ChatMessage message = data.get(i);
+                    int msgStatus = message.getMsgStatus();
+                    int bodyType = message.getBodyType();
+                    if (msgStatus != ChatMessage.MSG_SEND_SUCCESS){
+                        if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT){
+                            String json = GsonUtil.BeanToJson(message);
+                            SocketSendJson(json);
+                        }
+                    }
+                }
+            }else {
+                if (fl_socket_hint.getVisibility() == View.GONE){
+                    fl_socket_hint.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
     @Override
     public void onError(String msg) {
         showToast(msg);
+        smart_refresh.finishRefresh();
     }
 
     @Override
@@ -279,6 +324,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         rv_chat.setAdapter(chatAdapter);
         tv_chat_name.setText(bean.getUsername());
         tv_net_state.setText(NetState.getNetState(bean.getOnline()));
+        chatAdapter.setOnItemListener(this);
 
     }
 
@@ -335,5 +381,21 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         if (v.getId() == R.id.iv_back){
             finish();
         }
+    }
+
+    @Override
+    public void onClickIcon(String url) {
+
+    }
+
+    @Override
+    public void onLongClickSend(View view) {
+        showPopWindow(view);
+    }
+
+
+    @Override
+    public void onLongClickReceive(View view) {
+
     }
 }

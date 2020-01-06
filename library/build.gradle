@@ -63,4 +63,8 @@ dependencies {
     //腾讯bugly
     implementation 'com.tencent.bugly:crashreport:latest.release'
     implementation "com.facebook.fresco:fresco:1.10.0"
+    //任意位置弹出的popwindow
+    implementation 'com.github.zyyoona7:EasyPopup:1.1.2'
+    //尖角气泡控件
+    implementation 'com.github.zengzhaoxing:SharpView:v2.4.4'
 }

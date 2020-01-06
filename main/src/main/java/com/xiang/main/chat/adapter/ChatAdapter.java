@@ -27,6 +27,14 @@ import java.util.List;
  */
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private ChatItem mClickListener;
+
+    public interface ChatItem{
+        void onClickIcon(String url);
+        void onLongClickSend(View view);
+        void onLongClickReceive(View view);
+    }
+
 
     private final int TYPE_SEND_TEXT = 1;
     private final int TYPE_RECEIVE_TEXT = 2;
@@ -85,23 +93,59 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void setContext(RecyclerView.ViewHolder holder, ChatMessage message) {
+    private void setContext(final RecyclerView.ViewHolder holder, ChatMessage message) {
         String body = message.getBody();
         TextBody body1 = GsonUtil.GsonToBean(body, TextBody.class);
         if (holder instanceof ChatTextSendHolder) {
             ((ChatTextSendHolder) holder).tv_content.setText(body1.getMsg());
+            ((ChatTextSendHolder) holder).tv_content.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onLongClickSend(((ChatTextSendHolder) holder).tv_content);
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
         if (holder instanceof ChatTextReceiveHolder) {
             ((ChatTextReceiveHolder) holder).tv_content.setText(body1.getMsg());
+            ((ChatTextReceiveHolder) holder).tv_content.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onLongClickReceive(((ChatTextReceiveHolder) holder).tv_content);
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
     private void setIcon(RecyclerView.ViewHolder holder) {
         if (holder instanceof ChatTextSendHolder) {
             Glide.with(mContext).load(mFromUrl).into(((ChatTextSendHolder) holder).iv_icon);
+            ((ChatTextSendHolder)holder).iv_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onClickIcon(mFromUrl);
+                    }
+                }
+            });
         }
         if (holder instanceof ChatTextReceiveHolder) {
             Glide.with(mContext).load(mToUrl).into(((ChatTextReceiveHolder) holder).iv_icon);
+            ((ChatTextReceiveHolder)holder).iv_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onClickIcon(mFromUrl);
+                    }
+                }
+            });
         }
     }
 
@@ -197,10 +241,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 String pid1 = mList.get(i).getPid();
                 if (pid1.equals(pid)){
                     mList.get(i).setMsgStatus(status);
-                    notifyDataSetChanged();
+                    notifyItemChanged(i);
                     return;
                 }
             }
         }
+    }
+
+    public void setOnItemListener(ChatItem itemClickListener){
+        this.mClickListener = itemClickListener;
     }
 }
