@@ -1,6 +1,7 @@
 package com.lib.xiangxiang.im;
 
 import com.xiang.lib.chatBean.ChatMessage;
+import com.xiang.lib.chatBean.ImageBody;
 import com.xiang.lib.chatBean.TextBody;
 import com.xiang.lib.utils.OfTenUtils;
 
@@ -51,7 +52,7 @@ public class ImSendMessageUtils {
         return stringBuffer.toString();
     }
 
-    public static String getChatMessage(String msg,String fromId,String toId,int bodyType,int displaytime){
+    public static String getChatMessageText(String msg,String fromId,String toId,int bodyType,int displaytime){
         JSONObject object = new JSONObject();
         try {
             object.put("fromId",fromId);
@@ -59,6 +60,25 @@ public class ImSendMessageUtils {
             object.put("pid",getPid());
             object.put("bodyType",bodyType);
             object.put("body",GsonUtil.BeanToJson(new TextBody(msg)));
+            object.put("msgStatus",ChatMessage.MSG_SEND_LOADING);
+            object.put("time",System.currentTimeMillis());
+            object.put("type", ChatMessage.MSG_SEND_CHAT);
+            object.put("conversation", OfTenUtils.getConviction(fromId,toId));
+            object.put("displaytime",displaytime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
+
+    public static String getChatMessageEmoji(String msg,String fromId,String toId,int bodyType,int displaytime){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("fromId",fromId);
+            object.put("toId",toId);
+            object.put("pid",getPid());
+            object.put("bodyType",bodyType);
+            object.put("body",GsonUtil.BeanToJson(new ImageBody(msg)));
             object.put("msgStatus",ChatMessage.MSG_SEND_LOADING);
             object.put("time",System.currentTimeMillis());
             object.put("type", ChatMessage.MSG_SEND_CHAT);

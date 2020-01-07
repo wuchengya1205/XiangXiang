@@ -204,20 +204,32 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         CBEmoticonsView cbEmoticonsView = new CBEmoticonsView(this);
         cbEmoticonsView.init(getSupportFragmentManager());
         cb_kb.setEmoticonFuncView(cbEmoticonsView);
-        cbEmoticonsView.addEmoticonsWithName(new String[]{"default"});
+        cbEmoticonsView.addEmoticonsWithName(new String[]{"emoji"});
         cbEmoticonsView.setOnEmoticonClickListener(this);
     }
 
     private void sendText(String input) {
         if (!to_uid.isEmpty()){
             String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
-            String json = ImSendMessageUtils.getChatMessage(input,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_TEXT,chatAdapter.getLastItemDisplayTime());
+            String json = ImSendMessageUtils.getChatMessageText(input,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_TEXT,chatAdapter.getLastItemDisplayTime());
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
             SocketSendJson(json);
         }
     }
+
+    private void sendEmoji(String url){
+        if (!to_uid.isEmpty()){
+            String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
+            String json = ImSendMessageUtils.getChatMessageEmoji(url,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_EMOJI,chatAdapter.getLastItemDisplayTime());
+            ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
+            chatAdapter.setData(message);
+            toLastItem();
+            SocketSendJson(json);
+        }
+    }
+
 
     private void SocketSendJson(String json){
         SocketManager.sendMsgSocket(this,json,this);
@@ -262,7 +274,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onEmoticonClick(EmoticonsBean emoticon, boolean isDel) {
-
+        sendEmoji(emoticon.getIconUri().toString());
     }
 
     @Override

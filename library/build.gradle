@@ -67,4 +67,5 @@ dependencies {
     implementation 'com.github.zyyoona7:EasyPopup:1.1.2'
     //尖角气泡控件
     implementation 'com.github.zengzhaoxing:SharpView:v2.4.4'
+    implementation 'com.github.githubZYQ:easypermission:v1.0.0'
 }

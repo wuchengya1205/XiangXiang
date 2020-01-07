@@ -13,6 +13,7 @@ public class ChatMessage {
     public static int MSG_BODY_TYPE_VOICE = 3;  // 语音
     public static int MSG_BODY_TYPE_VOIDE = 4;  // 视频
     public static int MSG_BODY_TYPE_LOCATION = 5;//位置
+    public static int MSG_BODY_TYPE_EMOJI = 6;  // 表情
 
     // 消息状态
     public static int MSG_SEND_LOADING = 1;  // 正在发送
