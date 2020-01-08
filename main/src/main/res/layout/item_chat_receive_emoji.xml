@@ -24,9 +24,10 @@
         android:layout_marginRight="30dp"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.xiang.lib.utils.SqureImageView
             android:id="@+id/iv_icon"
             android:layout_width="45dp"
+            android:background="@drawable/shape_cir"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_height="45dp"/>

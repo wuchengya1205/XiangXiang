@@ -23,6 +23,7 @@ public class ARouterPath {
     public static final String ROUTER_USER_INFO = "/user/info";
 
     public static final String ROUTER_CHAT = "/main/chat";
+    public static final String ROUTER_RED_ENVELOPE = "/mian/red_envelope";
 
 
 }

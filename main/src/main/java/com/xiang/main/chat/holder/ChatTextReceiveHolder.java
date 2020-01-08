@@ -6,9 +6,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xiang.lib.utils.SqureImageView;
 import com.xiang.main.R;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * author : fengzhangwei
@@ -16,7 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ChatTextReceiveHolder extends RecyclerView.ViewHolder {
 
-    public CircleImageView iv_icon;
+    public SqureImageView iv_icon;
     public TextView tv_time;
     public TextView tv_content;
 

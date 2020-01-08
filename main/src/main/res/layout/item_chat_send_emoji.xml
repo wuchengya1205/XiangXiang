@@ -23,8 +23,9 @@
         android:layout_below="@id/tv_chat_time"
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.xiang.lib.utils.SqureImageView
             android:id="@+id/iv_icon"
+            android:background="@drawable/shape_cir"
             android:layout_width="45dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"

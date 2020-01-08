@@ -117,7 +117,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void setItemState(RecyclerView.ViewHolder holder, ChatMessage message) {
         int msgStatus = message.getMsgStatus();
         if (holder instanceof ChatTextSendHolder ){
-            if (msgStatus == ChatMessage.MSG_SEND_SUCCESS){
+            if (msgStatus >= ChatMessage.MSG_SEND_SUCCESS){
                 ((ChatTextSendHolder) holder).pb_state.setVisibility(View.GONE);
             }else if (msgStatus == ChatMessage.MSG_SEND_LOADING){
                 ((ChatTextSendHolder) holder).pb_state.setVisibility(View.VISIBLE);
@@ -125,7 +125,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (holder instanceof ChatEmojiSendHolder){
-            if (msgStatus == ChatMessage.MSG_SEND_SUCCESS){
+            if (msgStatus >= ChatMessage.MSG_SEND_SUCCESS){
                 ((ChatEmojiSendHolder) holder).pb_state.setVisibility(View.GONE);
             }else if (msgStatus == ChatMessage.MSG_SEND_LOADING){
                 ((ChatEmojiSendHolder) holder).pb_state.setVisibility(View.VISIBLE);

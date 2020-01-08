@@ -61,7 +61,6 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private ChatAdapter chatAdapter;
     private TextView tv_chat_name;
     private TextView tv_net_state;
-    private Boolean rv_isLat = false;
     private int pageNo = 1;
     private int pageSize = 30;
     private String conviction;
@@ -104,7 +103,9 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void initBar() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
+        ImmersionBar.with(this)
+                .hideBar(BarHide.FLAG_SHOW_BAR)
+                .init();
     }
 
     @Override
@@ -132,39 +133,30 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
                 return false;
             }
         });
-        rv_chat.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            Boolean isToLast = false;
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-               LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //获取最后一个完全显示的ItemPosition
-                    int lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition();//从0开始
-                    int totalItemCount = layoutManager.getItemCount();
-                    // 判断是否滚动到底部，并且是向下滚动
-                    if (lastVisibleItem == (totalItemCount - 1) && isToLast ) {
-                        //加载更多功能的代码
-                        rv_isLat = true;
-                    }else {
-                        rv_isLat = false;
-                    }
-                }
-            }
 
+        rv_chat.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                isToLast = dy > 0;
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    rv_chat.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (chatAdapter.getItemCount() > 0) {
+                                rv_chat.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
 
     private void initOptions() {
         List<AppFuncBean> list = new ArrayList<>();
-        list.add(new AppFuncBean(111001101,R.mipmap.ic_launcher,"图片"));
-        list.add(new AppFuncBean(111001102,R.mipmap.ic_launcher,"视频"));
-        list.add(new AppFuncBean(111001103,R.mipmap.ic_launcher,"位置"));
+        list.add(new AppFuncBean(111001101,R.mipmap.icon_image,"图片"));
+        list.add(new AppFuncBean(111001102,R.mipmap.icon_video,"视频"));
+        list.add(new AppFuncBean(111001103,R.mipmap.icon_location,"位置"));
+        list.add(new AppFuncBean(111001104,R.mipmap.icon_hb,"红包"));
         CBAppFuncView appFuncView = new CBAppFuncView(this);
         appFuncView.setRol(3);
         appFuncView.setAppFuncBeanList(list);
@@ -179,6 +171,9 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
                     case 111001102:
                         break;
                     case 111001103:
+                        break;
+                    case 111001104:
+                        goActivity(ARouterPath.ROUTER_RED_ENVELOPE);
                         break;
                         default:
                             break;
@@ -366,13 +361,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onFuncPop(int height) {
-        if (chatAdapter.getData().size() > 0){
-            if (rv_isLat){
-                toLastItem();
-            }else {
-                rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
-            }
-        }
+
     }
 
     @Override

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".act.RedEnvelopeActivity">
+
+    <View
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/shape_gradient" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="12dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:padding="6dp"
+            android:src="@drawable/picture_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="红包"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/bg"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginRight="30dp"
+        android:background="#00000000">
+
+        <RelativeLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:text="金额"
+                android:textColor="#DAA520"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/ed_money"
+                android:layout_width="wrap_content"
+                android:layout_toLeftOf="@id/tv_right"
+                android:layout_centerVertical="true"
+                android:hint="0.00"
+                android:textSize="16sp"
+                android:minWidth="50dp"
+                android:maxLength="6"
+                android:textColor="#DAA520"
+                android:textCursorDrawable="@null"
+                android:inputType="numberDecimal"
+                android:gravity="right"
+                android:background="@null"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:text="元"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:textColor="#DAA520"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_below="@id/card_view"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="封皮"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/red"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_marginLeft="30dp"
+            android:src="@mipmap/icon_hb_cover"
+            android:scaleType="fitXY"
+            android:layout_marginTop="8dp"
+            android:layout_height="100dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_send_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="45dp"
+        android:background="@drawable/shape_gradient_corners"
+        android:text="塞钱"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>
