@@ -81,29 +81,31 @@ public class ImService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int cmd = intent.getIntExtra(SOCKET_CMD, -1);
-        switch (cmd) {
-            case SOCKET_INIT:
-                initSocket(intent);
-                break;
-            case SOCKET_RESET:
-                releaseSocket();
-                break;
-            case SOCKET_SEND_MSG:
-                sendMsgSocket(intent);
-                break;
-            case SOCKET_SEND_MSG_CALLBACK:
-                callMsg2UI(intent);
-                break;
-            case SOCKET_SEND_ASK:
+        if (intent != null){
+            int cmd = intent.getIntExtra(SOCKET_CMD, -1);
+            switch (cmd) {
+                case SOCKET_INIT:
+                    initSocket(intent);
+                    break;
+                case SOCKET_RESET:
+                    releaseSocket();
+                    break;
+                case SOCKET_SEND_MSG:
+                    sendMsgSocket(intent);
+                    break;
+                case SOCKET_SEND_MSG_CALLBACK:
+                    callMsg2UI(intent);
+                    break;
+                case SOCKET_SEND_ASK:
 
-                break;
-            case SOCKET_RECEIVER_MSG:
-                callChatMsg2UI(intent);
-                break;
-            default:
+                    break;
+                case SOCKET_RECEIVER_MSG:
+                    callChatMsg2UI(intent);
+                    break;
+                default:
 
-                break;
+                    break;
+            }
         }
         return START_STICKY;
     }

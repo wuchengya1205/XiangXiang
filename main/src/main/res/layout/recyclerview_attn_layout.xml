@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="60dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_attn_icon"
+        android:layout_width="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_height="40dp"/>
+
+    <TextView
+        android:id="@+id/tv_attn_name"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/civ_attn_icon"
+        android:layout_marginLeft="14dp"
+        android:text="差一步"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_alignTop="@id/civ_attn_icon"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_net_sign"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/civ_attn_icon"
+        android:layout_below="@id/tv_attn_name"
+        android:layout_marginLeft="14dp"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="[wifi在线] ........"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

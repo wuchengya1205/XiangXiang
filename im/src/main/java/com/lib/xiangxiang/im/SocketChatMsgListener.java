@@ -2,11 +2,9 @@ package com.lib.xiangxiang.im;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
-import com.xiang.lib.utils.Constant;
-import com.xiang.lib.utils.SPUtils;
+import com.xiang.lib.chatBean.ChatMessage;
 
 import io.socket.emitter.Emitter;
 

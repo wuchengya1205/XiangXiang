@@ -2,6 +2,7 @@ package com.xiang.lib.base.ac;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -52,4 +53,9 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     protected abstract int getLayoutId();
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+    }
 }

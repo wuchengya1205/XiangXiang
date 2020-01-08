@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         tools:replace="icon,label,theme"
         android:theme="@style/WelcomeTheme">
-        <activity android:name="com.lib.xiangxiang.WelcomeActivity">
+        <activity android:theme="@style/AppTheme" android:name="com.lib.xiangxiang.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

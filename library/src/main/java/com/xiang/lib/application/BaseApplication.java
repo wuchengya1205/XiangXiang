@@ -58,7 +58,6 @@ public class BaseApplication extends Application {
         super.onCreate();
         instance = this;
         HttpConfig.INSTANCE.init(Constant.BASE_URL,getHeader(),getParams(),true);
-        NetConfig.init(this);
         CrashReport.initCrashReport(getApplicationContext(), "cc388b0013", false);
         Fresco.initialize(this);
         init();

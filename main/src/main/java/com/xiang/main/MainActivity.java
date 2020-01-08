@@ -1,30 +1,40 @@
 package com.xiang.main;
 
+import android.util.Log;
+import android.view.KeyEvent;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.view.KeyEvent;
-import android.view.View;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lib.xiangxiang.im.SocketManager;
 import com.xiang.lib.ARouterPath;
+import com.xiang.lib.base.BaseObserverTC;
+import com.xiang.lib.base.NetBroadcastReceiver;
+import com.xiang.lib.base.NetChangeListener;
+import com.xiang.lib.base.NetConfig;
 import com.xiang.lib.base.ac.BaseActivity;
 import com.xiang.lib.utils.Constant;
+import com.xiang.lib.net.IHttpProtocol;
 import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.fragment.MainFragment;
 import com.xiang.main.fragment.MenuFragment;
 
+import net.ljb.kt.client.HttpFactory;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 @Route(path = ARouterPath.ROUTER_MAIN)
-public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, NetChangeListener {
 
     private List<Fragment> fList = new ArrayList<>(2);
     public static ViewPager mViewPager;
@@ -37,6 +47,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     public void initView() {
         super.initView();
+        NetConfig.init(this);
         mViewPager = findViewById(R.id.vp_access);
     }
 
@@ -44,6 +55,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void initData() {
         super.initData();
         initBar();
+        NetBroadcastReceiver.setRegisterNetBRChange(this);
         String uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
         SocketManager.loginSocket(this,"uid="+uid);
         fList.add(new MenuFragment());
@@ -78,6 +90,44 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 .navigationBarAlpha(0.2f)  //导航栏透明度，不写默认 0.0F
                 .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
                 .init();
+    }
+
+    @Override
+    public void onChangeListener(Boolean status) {
+
+    }
+
+    @Override
+    public void onNetWorkState(int workState) {
+        upUserInfo(workState);
+    }
+
+    private void upUserInfo(int workState) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("online",workState);
+        map.put("uid",SPUtils.getInstance().getString(Constant.SPKey_UID));
+        HttpFactory.INSTANCE.getProtocol(IHttpProtocol.class)
+                .upUserInfo(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserverTC<String>(){
+
+                    @Override
+                    protected void onNextEx(@NonNull String data) {
+                        Log.i("net","--------" + data);
+
+                    }
+
+                    @Override
+                    protected void onErrorEx(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    protected void onNextSN(String msg) {
+                        super.onNextSN(msg);
+                    }
+                });
     }
 
     private class AccessPagerAdapter extends FragmentPagerAdapter {

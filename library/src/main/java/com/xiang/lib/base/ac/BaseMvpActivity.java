@@ -6,21 +6,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lib.library.R;
-import com.xiang.lib.ARouterPath;
-import com.xiang.lib.base.BaseNetLayout;
 import com.xiang.lib.base.LoadingDialog;
 import com.xiang.lib.base.NetBroadcastReceiver;
 import com.xiang.lib.base.NetChangeListener;
 import com.xiang.lib.utils.ActivityUtils;
+import com.xiang.lib.utils.NetState;
 
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.view.MvpActivity;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
@@ -32,6 +33,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     private TextView toolbar_menu_tv;
     private ImageView toolbar_menu;
     private LoadingDialog mLoading;
+    public String BUNDLE = "bundle";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
 
     public void initData() {
         mLoading = new LoadingDialog(this,false);
-        boolean connected = NetBroadcastReceiver.isNetworkConnected(this);
+        boolean connected = NetState.hasNetWorkConnection(this);
         setNetChange(connected);
     }
 
@@ -88,6 +90,15 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
                 .navigation();
     }
 
+    public void goActivity(String arPath,Bundle bundle){
+        if (arPath.isEmpty()){return;}
+        ARouter.getInstance()
+                .build(arPath)
+                .withTransition(R.anim.fade_in, R.anim.fade_out)
+                .withBundle(BUNDLE,bundle)
+                .navigation();
+    }
+
     public void goActivity(String arPath,int code){
         if (arPath.isEmpty()){return;}
         ARouter.getInstance()
@@ -99,7 +110,7 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     public void goActivity(Class cls,Bundle bundle){
         Intent intent = new Intent( this, cls);
         if (bundle != null){
-            intent.putExtra("bundle",bundle);
+            intent.putExtra(BUNDLE,bundle);
         }
         startActivity(intent);
     }
@@ -109,6 +120,11 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     @Override
     public void onChangeListener(Boolean status)  {
         setNetChange(status);
+    }
+
+    @Override
+    public void onNetWorkState(int workState) {
+
     }
 
     private void setNetChange(Boolean status) {

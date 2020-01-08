@@ -7,6 +7,7 @@ import android.content.Intent;
 import androidx.annotation.StringRes;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.WeakHashMap;
@@ -241,5 +242,24 @@ public class ActivityUtils {
     public boolean equalsIgnoreCase(final String s1, final String s2) {
         return s1 == null ? s2 == null : s1.equalsIgnoreCase(s2);
     }
+
+    //获取状态栏高度
+    public static int getStatusBarHeight(Context context) {
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
+    }
+
 
 }

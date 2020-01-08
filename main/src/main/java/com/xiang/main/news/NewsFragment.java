@@ -31,7 +31,7 @@ import java.util.List;
  * desc   :ohuo
  * version: 1.0
  */
-public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> implements NewsContract.IView, BannerViewPager.OnClickBannerListener, OnLoadMoreListener, ViewPager.OnPageChangeListener, TabLayout.BaseOnTabSelectedListener, OnRefreshListener {
+public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> implements NewsContract.IView, BannerViewPager.OnClickBannerListener,ViewPager.OnPageChangeListener, TabLayout.BaseOnTabSelectedListener, OnRefreshListener {
 
     private List<String> tabData = new ArrayList<>();
     private List<String> bannerData = new ArrayList<>();
@@ -73,7 +73,6 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
         mViewPager.addOnPageChangeListener(this);
         mTabLayout.addOnTabSelectedListener(this);
         smart_refresh.setOnRefreshListener(this);
-        smart_refresh.setOnLoadMoreListener(this);
     }
 
     private void initBannerData() {
@@ -121,11 +120,6 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         refreshLayout.finishRefresh(3000);
-    }
-
-    @Override
-    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        refreshLayout.finishLoadMore(3000);
     }
 
     @Override

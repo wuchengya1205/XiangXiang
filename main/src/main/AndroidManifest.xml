@@ -2,10 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xiang.main">
 
-    <application >
-        <activity android:name=".UserInfoActivity" android:theme="@style/AppTheme"></activity>
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme"/>
-        <service  android:name="com.lib.xiangxiang.im.ImService" />
+    <application>
+        <activity
+            android:name=".chat.ac.ChatActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".chat.ac.AttnInfoActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".UserInfoActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme" />
+
+        <service android:name="com.lib.xiangxiang.im.ImService" />
     </application>
 
 </manifest>
