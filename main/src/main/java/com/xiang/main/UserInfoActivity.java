@@ -48,6 +48,7 @@ public class UserInfoActivity extends BaseMvpActivity<UserInfoContract.IPresente
     private String image_url = "";
     private Button btn_change_info;
     private FileUpLoadManager fileUpLoadManager;
+    private TextView tv_money;
 
     @Override
     protected int getLayoutId() {
@@ -86,6 +87,7 @@ public class UserInfoActivity extends BaseMvpActivity<UserInfoContract.IPresente
         tv_birthday_info = findViewById(R.id.tv_birthday_info);
         ed_sign_info = findViewById(R.id.ed_sign_info);
         ed_email_info = findViewById(R.id.ed_email_info);
+        tv_money = findViewById(R.id.tv_money);
         btn_change_info = findViewById(R.id.btn_change_info);
     }
 
@@ -119,6 +121,7 @@ public class UserInfoActivity extends BaseMvpActivity<UserInfoContract.IPresente
             tv_birthday_info.setText(userInfo.getBirthday());
             ed_sign_info.setText(userInfo.getSign());
             ed_email_info.setText(userInfo.getEmail());
+            tv_money.setText("余额:" + userInfo.getMoney() + "$");
         }
     }
 

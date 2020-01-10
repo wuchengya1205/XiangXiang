@@ -188,6 +188,14 @@ public class SocketManager {
                 }else {
                     EventBus.getDefault().postSticky(chatMessage);
                 }
+            }else if (chatMessage.getFromId().equals(id)){
+                if (chatMessage.getType() == ChatMessage.MSG_SEND_SYS){
+                    if (chatMessage.getBodyType() == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
+                        if (chatMessage.getMsgStatus() == ChatMessage.STATUS_OVERTIME){
+
+                        }
+                    }
+                }
             }
 
         }

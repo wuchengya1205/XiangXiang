@@ -81,6 +81,16 @@ public class ArithmeticUtils {
         BigDecimal b2 = new BigDecimal(v2);
         return b1.subtract(b2);
     }
+    /**
+     * 提供精确的减法运算。
+     *
+     * @param v1 被减数
+     * @param v2 减数
+     * @return 两个参数的差
+     */
+    public static BigDecimal sub(BigDecimal v1, BigDecimal v2) {
+        return v1.subtract(v2);
+    }
 
     /**
      * 提供精确的减法运算
@@ -285,6 +295,23 @@ public class ArithmeticUtils {
         BigDecimal b1 = new BigDecimal(v1);
         BigDecimal b2 = new BigDecimal(v2);
         int bj = b1.compareTo(b2);
+        boolean res;
+        if (bj > 0)
+            res = true;
+        else
+            res = false;
+        return res;
+    }
+
+    /**
+     * 比较大小
+     *
+     * @param v1 被比较数
+     * @param v2 比较数
+     * @return 如果v1 大于v2 则 返回true 否则false
+     */
+    public static boolean compare(BigDecimal v1, BigDecimal v2) {
+        int bj = v1.compareTo(v2);
         boolean res;
         if (bj > 0)
             res = true;

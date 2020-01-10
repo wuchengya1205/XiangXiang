@@ -14,11 +14,16 @@ public class ChatMessage {
     public static int MSG_BODY_TYPE_VOIDE = 4;  // 视频
     public static int MSG_BODY_TYPE_LOCATION = 5;//位置
     public static int MSG_BODY_TYPE_EMOJI = 6;  // 表情
+    public static int MSG_BODY_TYPE_RED_ENVELOPE = 7;//红包
 
     // 消息状态
     public static int MSG_SEND_LOADING = 1;  // 正在发送
     public static int MSG_SEND_SUCCESS = 2;  // 成功
     public static int MSG_SEND_ERROR = 3;    // 失败
+    // 红包
+    public static int STATUS_UNCLAIMED = 4; // 未领取
+    public static int STATUS_ALREADY_RECEIVED = 5;  // 已领取
+    public static int STATUS_OVERTIME = 6;   // 超时
 
     public static int MSG_SEND_CHAT = 1;   // 聊天
     public static int MSG_SEND_SYS = 2;    // 通知

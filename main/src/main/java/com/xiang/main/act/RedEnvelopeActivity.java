@@ -1,8 +1,10 @@
 package com.xiang.main.act;
 
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -16,12 +18,16 @@ import com.xiang.main.R;
 import com.xiang.main.contract.RedEnvelopeContract;
 import com.xiang.main.presenter.RedEnvelopePresenter;
 
+import java.math.BigDecimal;
+
 @Route(path = ARouterPath.ROUTER_RED_ENVELOPE)
 public class RedEnvelopeActivity extends BaseMvpActivity<RedEnvelopeContract.IPresenter> implements RedEnvelopeContract.IView, View.OnClickListener {
 
 
+    public static int ok = 456;
     private EditText ed_money;
     private ImageView iv_back;
+    private Button btn_send_money;
 
     @Override
     protected int getLayoutId() {
@@ -38,6 +44,7 @@ public class RedEnvelopeActivity extends BaseMvpActivity<RedEnvelopeContract.IPr
         super.initView();
         ed_money = findViewById(R.id.ed_money);
         iv_back = findViewById(R.id.iv_back);
+        btn_send_money = findViewById(R.id.btn_send_money);
     }
 
     @Override
@@ -45,6 +52,7 @@ public class RedEnvelopeActivity extends BaseMvpActivity<RedEnvelopeContract.IPr
         super.initData();
         ed_money.addTextChangedListener(textWatcher);
         iv_back.setOnClickListener(this);
+        btn_send_money.setOnClickListener(this);
     }
 
     @Override
@@ -82,5 +90,29 @@ public class RedEnvelopeActivity extends BaseMvpActivity<RedEnvelopeContract.IPr
         if (v.getId() == R.id.iv_back){
             finish();
         }
+        if (v.getId() == R.id.btn_send_money){
+            showLoading();
+            getPresenter().sendRedEnvelope();
+        }
+    }
+
+    @Override
+    public void onSuccess(BigDecimal money) {
+        dismissLoading();
+        Intent intent = getIntent();
+        intent.putExtra("money",String.valueOf(money));
+        setResult(ok,intent);
+        finish();
+    }
+
+    @Override
+    public void onError(String msg) {
+        dismissLoading();
+        showToast(msg);
+    }
+
+    @Override
+    public String getInputMoney() {
+        return ed_money.getText().toString().trim();
     }
 }

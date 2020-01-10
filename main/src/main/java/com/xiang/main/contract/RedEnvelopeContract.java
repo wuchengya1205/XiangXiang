@@ -1,5 +1,7 @@
 package com.xiang.main.contract;
 
+import java.math.BigDecimal;
+
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.contract.IViewContract;
 
@@ -10,11 +12,12 @@ import mvp.ljb.kt.contract.IViewContract;
 public interface RedEnvelopeContract {
 
     interface IView extends IViewContract {
-
+        void onSuccess(BigDecimal money);
+        void onError(String msg);
+        String getInputMoney();
     }
 
     interface IPresenter extends IPresenterContract {
-
-
+        void sendRedEnvelope();
     }
 }

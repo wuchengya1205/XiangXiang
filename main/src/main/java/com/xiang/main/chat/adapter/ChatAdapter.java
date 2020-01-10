@@ -19,6 +19,10 @@ import com.xiang.lib.utils.TimeUtil;
 import com.xiang.main.R;
 import com.xiang.main.chat.holder.ChatEmojiReceiveHolder;
 import com.xiang.main.chat.holder.ChatEmojiSendHolder;
+import com.xiang.main.chat.holder.ChatRedEnvelopeARDHolder;
+import com.xiang.main.chat.holder.ChatRedEnvelopeAdverseARDHolder;
+import com.xiang.main.chat.holder.ChatRedEnvelopeReceiveHolder;
+import com.xiang.main.chat.holder.ChatRedEnvelopeSendHolder;
 import com.xiang.main.chat.holder.ChatTextReceiveHolder;
 import com.xiang.main.chat.holder.ChatTextSendHolder;
 
@@ -36,13 +40,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onClickIcon(String url);
         void onLongClickSend(View view);
         void onLongClickReceive(View view);
+        void onClickRedEnvelope(ChatMessage message);
     }
 
 
+    // 文本
     private final int TYPE_SEND_TEXT = 1;
     private final int TYPE_RECEIVE_TEXT = 2;
+
+    //表情
     private final int TYPE_SEND_EMOJI = 3;
     private final int TYPE_RECEIVE_EMOJI = 4;
+
+    //红包
+    private final int TYPE_SEND_RED_ENVELOPE = 5;  // 发送
+    private final int TYPE_RECEIVE_RED_ENVELOPE = 6; // 接受
+    private final int TYPE_ADVERSE_ARD = 7; // 对方领取红包
+    private final int TYPE_ARD = 8;      // 您已领取红包
 
 
     private String mFromId = SPUtils.getInstance().getString(Constant.SPKey_UID);
@@ -80,6 +94,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_receive_emoji,parent,false);
                 viewHolder = new ChatEmojiReceiveHolder(view);
                 break;
+            case TYPE_SEND_RED_ENVELOPE:
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_send_red_envelope,parent,false);
+                viewHolder = new ChatRedEnvelopeSendHolder(view);
+                break;
+            case TYPE_RECEIVE_RED_ENVELOPE:
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_receive_red_envelope,parent,false);
+                viewHolder = new ChatRedEnvelopeReceiveHolder(view);
+                break;
+            case TYPE_ADVERSE_ARD:
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_red_envelope_hint,parent,false);
+                viewHolder = new ChatRedEnvelopeAdverseARDHolder(view);
+                break;
+            case TYPE_ARD:
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_red_envelope_hint,parent,false);
+                viewHolder = new ChatRedEnvelopeARDHolder(view);
+                break;
             default:
                 break;
         }
@@ -88,12 +118,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ChatMessage message = mList.get(position);
+        final ChatMessage message = mList.get(position);
         setTime(holder,mList,position);
         setIcon(holder);
         setItemState(holder,message);
         setContext(holder,message);
         setEmoji(holder,message);
+        if (holder instanceof ChatRedEnvelopeReceiveHolder){
+            ((ChatRedEnvelopeReceiveHolder) holder).iv_red_envelope.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onClickRedEnvelope(message);
+                    }
+                }
+            });
+        }
 
     }
 
@@ -131,6 +171,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ChatEmojiSendHolder) holder).pb_state.setVisibility(View.VISIBLE);
             }
         }
+
+        if (holder instanceof ChatRedEnvelopeSendHolder){
+            if (msgStatus >= ChatMessage.MSG_SEND_SUCCESS){
+                ((ChatRedEnvelopeSendHolder) holder).pb_state.setVisibility(View.GONE);
+            }else if (msgStatus == ChatMessage.MSG_SEND_LOADING){
+                ((ChatRedEnvelopeSendHolder) holder).pb_state.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void setContext(final RecyclerView.ViewHolder holder, ChatMessage message) {
@@ -149,6 +197,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
+        if (holder instanceof ChatRedEnvelopeAdverseARDHolder){
+            ((ChatRedEnvelopeAdverseARDHolder) holder).tv_content.setText("对方已领取您的红包");
+        }
         if (holder instanceof ChatTextReceiveHolder) {
             ((ChatTextReceiveHolder) holder).tv_content.setText(body1.getMsg());
             ((ChatTextReceiveHolder) holder).tv_content.setOnLongClickListener(new View.OnLongClickListener() {
@@ -161,6 +212,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     return false;
                 }
             });
+        }
+
+        if (holder instanceof ChatRedEnvelopeARDHolder){
+            ((ChatRedEnvelopeARDHolder) holder).tv_content.setText("您已领取红包");
         }
     }
 
@@ -180,6 +235,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof ChatEmojiSendHolder ){
             Glide.with(mContext).load(mFromUrl).into(((ChatEmojiSendHolder) holder).iv_icon);
             ((ChatEmojiSendHolder)holder).iv_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onClickIcon(mFromUrl);
+                    }
+                }
+            });
+        }
+
+        if (holder instanceof ChatRedEnvelopeSendHolder){
+            Glide.with(mContext).load(mFromUrl).into(((ChatRedEnvelopeSendHolder) holder).iv_icon);
+            ((ChatRedEnvelopeSendHolder)holder).iv_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null){
@@ -210,6 +277,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
+        if (holder instanceof ChatRedEnvelopeReceiveHolder){
+            Glide.with(mContext).load(mToUrl).into(((ChatRedEnvelopeReceiveHolder) holder).iv_icon);
+            ((ChatRedEnvelopeReceiveHolder)holder).iv_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null){
+                        mClickListener.onClickIcon(mFromUrl);
+                    }
+                }
+            });
+        }
     }
 
     private void setTime(RecyclerView.ViewHolder holder,List<ChatMessage> list,int position) {
@@ -224,11 +302,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (holder instanceof ChatEmojiSendHolder){
                 ((ChatEmojiSendHolder) holder).tv_time.setVisibility(View.GONE);
             }
+            if (holder instanceof  ChatRedEnvelopeSendHolder){
+                ((ChatRedEnvelopeSendHolder) holder).tv_time.setVisibility(View.GONE);
+            }
             if (holder instanceof ChatTextReceiveHolder) {
                 ((ChatTextReceiveHolder) holder).tv_time.setVisibility(View.GONE);
             }
             if (holder instanceof ChatEmojiReceiveHolder) {
                 ((ChatEmojiReceiveHolder) holder).tv_time.setVisibility(View.GONE);
+            }
+            if (holder instanceof ChatRedEnvelopeReceiveHolder){
+                ((ChatRedEnvelopeReceiveHolder) holder).tv_time.setVisibility(View.GONE);
             }
         }else {
             if (holder instanceof ChatTextSendHolder) {
@@ -248,6 +332,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ChatEmojiReceiveHolder) holder).tv_time.setVisibility(View.VISIBLE);
                 ((ChatEmojiReceiveHolder) holder).tv_time.setText(chatTime);
             }
+            if (holder instanceof ChatRedEnvelopeSendHolder){
+                ((ChatRedEnvelopeSendHolder) holder).tv_time.setVisibility(View.VISIBLE);
+                ((ChatRedEnvelopeSendHolder) holder).tv_time.setText(chatTime);
+            }
+            if (holder instanceof ChatRedEnvelopeReceiveHolder){
+                ((ChatRedEnvelopeReceiveHolder) holder).tv_time.setVisibility(View.VISIBLE);
+                ((ChatRedEnvelopeReceiveHolder) holder).tv_time.setText(chatTime);
+            }
 
         }
 
@@ -258,6 +350,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ChatMessage message = mList.get(position);
         String fromId = message.getFromId();
         int bodyType = message.getBodyType();
+        int status = message.getMsgStatus();
         if (fromId.equals(mFromId)) {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
                 return TYPE_SEND_TEXT;
@@ -265,12 +358,24 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_EMOJI){
                 return TYPE_SEND_EMOJI;
             }
+
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE && status == ChatMessage.STATUS_ALREADY_RECEIVED){
+                return TYPE_ADVERSE_ARD;
+            }else if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
+                return TYPE_SEND_RED_ENVELOPE;
+            }
         } else {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
                 return TYPE_RECEIVE_TEXT;
             }
             if (bodyType == ChatMessage.MSG_BODY_TYPE_EMOJI){
                 return TYPE_RECEIVE_EMOJI;
+            }
+
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE && status == ChatMessage.STATUS_ALREADY_RECEIVED){
+                return TYPE_ARD;
+            }else if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
+                return TYPE_RECEIVE_RED_ENVELOPE;
             }
 
         }

@@ -1,6 +1,7 @@
 package com.xiang.main.chat.ac;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +41,7 @@ import com.xiang.lib.utils.NetState;
 import com.xiang.lib.utils.OfTenUtils;
 import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.R;
+import com.xiang.main.act.RedEnvelopeActivity;
 import com.xiang.main.chat.adapter.ChatAdapter;
 import com.xiang.main.chat.contract.ChatContract;
 import com.xiang.main.chat.presenter.ChatPresenter;
@@ -53,6 +56,7 @@ import java.util.List;
 @Route(path = ARouterPath.ROUTER_CHAT)
 public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener, ChatAdapter.ChatItem {
 
+    private int REQUEST_CODE_RED_ENVELOPE = 123;
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
     private RecyclerView rv_chat;
@@ -116,7 +120,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         getPresenter().getUserInfo(to_uid);
         conviction = OfTenUtils.getConviction(SPUtils.getInstance().getString(Constant.SPKey_UID), to_uid);
         showLoading();
-        getPresenter().getHistory(conviction,pageNo,pageSize);
+        getPresenter().getHistory(conviction, pageNo, pageSize);
         smart_refresh.setOnRefreshListener(this);
         iv_back.setOnClickListener(this);
     }
@@ -127,7 +131,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         rv_chat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (cb_kb != null){
+                if (cb_kb != null) {
                     cb_kb.reset();
                 }
                 return false;
@@ -153,10 +157,10 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     private void initOptions() {
         List<AppFuncBean> list = new ArrayList<>();
-        list.add(new AppFuncBean(111001101,R.mipmap.icon_image,"图片"));
-        list.add(new AppFuncBean(111001102,R.mipmap.icon_video,"视频"));
-        list.add(new AppFuncBean(111001103,R.mipmap.icon_location,"位置"));
-        list.add(new AppFuncBean(111001104,R.mipmap.icon_hb,"红包"));
+        list.add(new AppFuncBean(111001101, R.mipmap.icon_image, "图片"));
+        list.add(new AppFuncBean(111001102, R.mipmap.icon_video, "视频"));
+        list.add(new AppFuncBean(111001103, R.mipmap.icon_location, "位置"));
+        list.add(new AppFuncBean(111001104, R.mipmap.icon_hb, "红包"));
         CBAppFuncView appFuncView = new CBAppFuncView(this);
         appFuncView.setRol(3);
         appFuncView.setAppFuncBeanList(list);
@@ -165,7 +169,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             @Override
             public void onAppFunClick(AppFuncBean emoticon) {
                 int id = emoticon.getId();
-                switch (id){
+                switch (id) {
                     case 111001101:
                         break;
                     case 111001102:
@@ -173,10 +177,10 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
                     case 111001103:
                         break;
                     case 111001104:
-                        goActivity(ARouterPath.ROUTER_RED_ENVELOPE);
+                        goActivity(ARouterPath.ROUTER_RED_ENVELOPE, REQUEST_CODE_RED_ENVELOPE);
                         break;
-                        default:
-                            break;
+                    default:
+                        break;
                 }
             }
         });
@@ -204,9 +208,9 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     }
 
     private void sendText(String input) {
-        if (!to_uid.isEmpty()){
+        if (!to_uid.isEmpty()) {
             String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
-            String json = ImSendMessageUtils.getChatMessageText(input,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_TEXT,chatAdapter.getLastItemDisplayTime());
+            String json = ImSendMessageUtils.getChatMessageText(input, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_TEXT, chatAdapter.getLastItemDisplayTime());
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
@@ -214,10 +218,21 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         }
     }
 
-    private void sendEmoji(String url){
-        if (!to_uid.isEmpty()){
+    private void sendEmoji(String url) {
+        if (!to_uid.isEmpty()) {
             String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
-            String json = ImSendMessageUtils.getChatMessageEmoji(url,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_EMOJI,chatAdapter.getLastItemDisplayTime());
+            String json = ImSendMessageUtils.getChatMessageEmoji(url, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_EMOJI, chatAdapter.getLastItemDisplayTime());
+            ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
+            chatAdapter.setData(message);
+            toLastItem();
+            SocketSendJson(json);
+        }
+    }
+
+    private void sendRedEnvelope(String money) {
+        if (!to_uid.isEmpty()) {
+            String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
+            String json = ImSendMessageUtils.getChatMessageRedEnvelope(money, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE, chatAdapter.getLastItemDisplayTime());
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
@@ -226,18 +241,18 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     }
 
 
-    private void SocketSendJson(String json){
-        SocketManager.sendMsgSocket(this,json,this);
+    private void SocketSendJson(String json) {
+        SocketManager.sendMsgSocket(this, json, this);
     }
 
-    private void toLastItem(){
-        chatAdapter.notifyItemChanged(chatAdapter.getItemCount()-1);
-        rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+    private void toLastItem() {
+        chatAdapter.notifyItemChanged(chatAdapter.getItemCount() - 1);
+        rv_chat.scrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
     private void showPopWindow(View view) {
         RelativePopupWindow popupWindow = new RelativePopupWindow();
-        popupWindow.setContentView(View.inflate(this,R.layout.chat_pop,null));
+        popupWindow.setContentView(View.inflate(this, R.layout.chat_pop, null));
         popupWindow.setFocusable(true);
         popupWindow.showOnAnchor(view, RelativePopupWindow.VerticalPosition.ABOVE, RelativePopupWindow.HorizontalPosition.CENTER);
     }
@@ -281,7 +296,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void receiverMsg(ChatMessage msg) {
-        if (chatAdapter != null){
+        if (chatAdapter != null) {
             chatAdapter.setData(msg);
             toLastItem();
         }
@@ -289,26 +304,26 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void socketError(String msg) {
-        if (fl_socket_hint != null){
-            if (ImSocketClient.checkSocket()){
-                if (fl_socket_hint.getVisibility() == View.VISIBLE){
+        if (fl_socket_hint != null) {
+            if (ImSocketClient.checkSocket()) {
+                if (fl_socket_hint.getVisibility() == View.VISIBLE) {
                     fl_socket_hint.setVisibility(View.GONE);
                 }
                 List<ChatMessage> data = chatAdapter.getData();
                 int size = chatAdapter.getData().size();
-                for (int i=0;i<size;i++){
+                for (int i = 0; i < size; i++) {
                     ChatMessage message = data.get(i);
                     int msgStatus = message.getMsgStatus();
                     int bodyType = message.getBodyType();
-                    if (msgStatus != ChatMessage.MSG_SEND_SUCCESS){
-                        if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT){
+                    if (msgStatus != ChatMessage.MSG_SEND_SUCCESS) {
+                        if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
                             String json = GsonUtil.BeanToJson(message);
                             SocketSendJson(json);
                         }
                     }
                 }
-            }else {
-                if (fl_socket_hint.getVisibility() == View.GONE){
+            } else {
+                if (fl_socket_hint.getVisibility() == View.GONE) {
                     fl_socket_hint.setVisibility(View.VISIBLE);
                 }
             }
@@ -325,7 +340,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     public void onSuccessInfo(LoginBean bean) {
         String json = SPUtils.getInstance().getString(Constant.SPKey_USERINFO);
         LoginBean from_bean = GsonUtil.GsonToBean(json, LoginBean.class);
-        if (chatAdapter == null){
+        if (chatAdapter == null) {
             chatAdapter = new ChatAdapter(new ArrayList<ChatMessage>(), this, from_bean.getImageUrl(), bean.getImageUrl());
         }
         rv_chat.setAdapter(chatAdapter);
@@ -340,11 +355,11 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         int size = list.size();
         smart_refresh.finishRefresh();
         dismissLoading();
-        if (size > 0){
+        if (size > 0) {
             chatAdapter.setData(list);
-            layoutManager.scrollToPositionWithOffset(list.size(),0);
+            layoutManager.scrollToPositionWithOffset(list.size(), 0);
         }
-        if (pageNo == 1){
+        if (pageNo == 1) {
             toLastItem();
         }
 
@@ -353,7 +368,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     @Override
     public void onSuccessNull() {
         smart_refresh.finishRefresh();
-        if (pageNo > 1){
+        if (pageNo > 1) {
             pageNo--;
         }
     }
@@ -371,19 +386,20 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        if (chatAdapter.getData().size() > 0){
-            pageNo ++;
+        if (chatAdapter.getData().size() > 0) {
+            pageNo++;
         }
-        getPresenter().getHistory(conviction,pageNo,pageSize);
+        getPresenter().getHistory(conviction, pageNo, pageSize);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iv_back){
+        if (v.getId() == R.id.iv_back) {
             finish();
         }
     }
 
+    // item 点击事件
     @Override
     public void onClickIcon(String url) {
 
@@ -391,12 +407,33 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onLongClickSend(View view) {
-        showPopWindow(view);
+        // showPopWindow(view);
     }
 
 
     @Override
     public void onLongClickReceive(View view) {
 
+    }
+
+    @Override
+    public void onClickRedEnvelope(ChatMessage message) {
+        if (message.getBodyType() == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE &&
+                message.getMsgStatus() == ChatMessage.MSG_SEND_SUCCESS) {
+            message.setMsgStatus(ChatMessage.STATUS_ALREADY_RECEIVED);
+            SocketSendJson(GsonUtil.BeanToJson(message));
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_RED_ENVELOPE) {
+            if (resultCode == RedEnvelopeActivity.ok) {
+                String money = data.getStringExtra("money");
+                sendRedEnvelope(money);
+            }
+        }
     }
 }
