@@ -25,12 +25,13 @@
         android:layout_marginRight="30dp"
         android:layout_height="wrap_content">
 
-        <com.xiang.lib.utils.SqureImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
             android:layout_width="45dp"
             android:background="@drawable/shape_cir"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            chat:corner_radius="6dp"
             android:layout_height="45dp"/>
 
 

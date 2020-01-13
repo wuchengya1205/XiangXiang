@@ -24,29 +24,34 @@
         android:layout_below="@id/tv_chat_time"
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content">
-        <com.xiang.lib.utils.SqureImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
             android:layout_width="45dp"
+            chat:corner_radius="6dp"
             android:background="@drawable/shape_cir"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_height="45dp"/>
 
-        <ImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_red_envelope"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="4dp"
             android:scaleType="fitXY"
+            chat:corner_radius="4dp"
             android:src="@mipmap/icon_hb_cover"
             android:layout_toLeftOf="@id/iv_icon"
-            android:layout_height="100dp"/>
+            android:layout_height="140dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:text="红包"
             android:textSize="12sp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="@drawable/shape_red_envelope_bg"
             android:layout_below="@id/iv_red_envelope"
             android:layout_alignLeft="@id/iv_red_envelope"
             android:layout_marginTop="4dp"

@@ -40,17 +40,17 @@ public class RedEnvelopePresenter extends BaseMvpPresenter<RedEnvelopeContract.I
             boolean b = ArithmeticUtils.compare(sub, new BigDecimal("0.00"));
             if (b){
                 bean.setMoney(sub);
-                updateMoney(new BigDecimal(inputMoney),bean);
+                updateMoney(sub,bean,new BigDecimal(inputMoney));
             }else {
                 getMvpView().onError("余额不足.");
             }
         }else {
             bean.setMoney(sub);
-            updateMoney(new BigDecimal(inputMoney),bean);
+            updateMoney(sub,bean,new BigDecimal(inputMoney));
         }
     }
 
-    private void updateMoney(final BigDecimal sub, final LoginBean bean) {
+    private void updateMoney(final BigDecimal sub, final LoginBean bean,final BigDecimal inputMoney) {
         String uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
         HashMap<String, String> map = new HashMap<>();
         map.put("money",String.valueOf(sub));
@@ -65,7 +65,7 @@ public class RedEnvelopePresenter extends BaseMvpPresenter<RedEnvelopeContract.I
                     protected void onNextEx(@NonNull String data) {
                         Log.i("net","--------" + data);
                         SPUtils.getInstance().put(Constant.SPKey_USERINFO,GsonUtil.BeanToJson(bean));
-                        getMvpView().onSuccess(sub);
+                        getMvpView().onSuccess(inputMoney);
                     }
 
                     @Override

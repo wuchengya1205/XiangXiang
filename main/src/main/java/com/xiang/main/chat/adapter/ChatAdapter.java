@@ -198,7 +198,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
         if (holder instanceof ChatRedEnvelopeAdverseARDHolder){
-            ((ChatRedEnvelopeAdverseARDHolder) holder).tv_content.setText("对方已领取您的红包");
+            ((ChatRedEnvelopeAdverseARDHolder) holder).tv_content.setText("对方领取了你的红包");
         }
         if (holder instanceof ChatTextReceiveHolder) {
             ((ChatTextReceiveHolder) holder).tv_content.setText(body1.getMsg());
@@ -350,7 +350,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ChatMessage message = mList.get(position);
         String fromId = message.getFromId();
         int bodyType = message.getBodyType();
-        int status = message.getMsgStatus();
         if (fromId.equals(mFromId)) {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
                 return TYPE_SEND_TEXT;
@@ -358,11 +357,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_EMOJI){
                 return TYPE_SEND_EMOJI;
             }
-
-            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE && status == ChatMessage.STATUS_ALREADY_RECEIVED){
-                return TYPE_ADVERSE_ARD;
-            }else if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
                 return TYPE_SEND_RED_ENVELOPE;
+            }
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE_HINT){
+                return TYPE_ARD;
             }
         } else {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
@@ -371,11 +370,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (bodyType == ChatMessage.MSG_BODY_TYPE_EMOJI){
                 return TYPE_RECEIVE_EMOJI;
             }
-
-            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE && status == ChatMessage.STATUS_ALREADY_RECEIVED){
-                return TYPE_ARD;
-            }else if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE){
                 return TYPE_RECEIVE_RED_ENVELOPE;
+            }
+            if (bodyType == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE_HINT){
+                return TYPE_ADVERSE_ARD;
             }
 
         }

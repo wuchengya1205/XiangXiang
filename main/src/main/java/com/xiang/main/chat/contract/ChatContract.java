@@ -21,11 +21,14 @@ public interface ChatContract {
         void onError(String msg);
         void onSuccessInfo(LoginBean bean);
         void onSuccessHistory(List<ChatMessage> list);
+        void onSuccessRedEnvelope(ChatMessage data);
         void onSuccessNull();
     }
 
     interface IPresenter extends IPresenterContract {
         void getUserInfo(String uid);
         void getHistory(String conversation,int pageNo,int pageSize);
+        void updateEnvelope(String fromId,String toId,String pid);
+        void updateMoney(String money);
     }
 }

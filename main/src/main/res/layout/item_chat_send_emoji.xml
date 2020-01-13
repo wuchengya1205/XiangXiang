@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
     android:layout_height="wrap_content">
 
@@ -23,10 +24,11 @@
         android:layout_below="@id/tv_chat_time"
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content">
-        <com.xiang.lib.utils.SqureImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
             android:background="@drawable/shape_cir"
             android:layout_width="45dp"
+            app:corner_radius="6dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_height="45dp"/>

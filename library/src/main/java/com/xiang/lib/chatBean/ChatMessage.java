@@ -15,6 +15,7 @@ public class ChatMessage {
     public static int MSG_BODY_TYPE_LOCATION = 5;//位置
     public static int MSG_BODY_TYPE_EMOJI = 6;  // 表情
     public static int MSG_BODY_TYPE_RED_ENVELOPE = 7;//红包
+    public static int MSG_BODY_TYPE_RED_ENVELOPE_HINT = 8; // 红包领取提示
 
     // 消息状态
     public static int MSG_SEND_LOADING = 1;  // 正在发送
@@ -41,7 +42,7 @@ public class ChatMessage {
     private Long time;
     private int type = MSG_SEND_CHAT;
     private String conversation;
-    private int displaytime = MSG_TIME_TRUE;
+    private int displaytime = MSG_TIME_FALSE;
 
     public int getDisplaytime() {
         return displaytime;

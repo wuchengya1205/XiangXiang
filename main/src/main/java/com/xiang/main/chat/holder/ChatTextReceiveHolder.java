@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xiang.lib.utils.SqureImageView;
+import com.shehuan.niv.NiceImageView;
 import com.xiang.main.R;
 
 /**
@@ -15,7 +15,7 @@ import com.xiang.main.R;
  */
 public class ChatTextReceiveHolder extends RecyclerView.ViewHolder {
 
-    public SqureImageView iv_icon;
+    public NiceImageView iv_icon;
     public TextView tv_time;
     public TextView tv_content;
 

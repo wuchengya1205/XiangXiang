@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.codebear.keyboard.CBEmoticonsKeyBoard;
 import com.codebear.keyboard.data.AppFuncBean;
 import com.codebear.keyboard.data.EmoticonsBean;
+import com.codebear.keyboard.utils.EmoticonsKeyboardUtils;
 import com.codebear.keyboard.widget.CBAppFuncView;
 import com.codebear.keyboard.widget.CBEmoticonsView;
 import com.codebear.keyboard.widget.FuncLayout;
@@ -36,6 +37,7 @@ import com.xiang.lib.ARouterPath;
 import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.ac.BaseMvpActivity;
 import com.xiang.lib.chatBean.ChatMessage;
+import com.xiang.lib.chatBean.RedEnvelopeBody;
 import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.NetState;
 import com.xiang.lib.utils.OfTenUtils;
@@ -365,6 +367,17 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     }
 
+    // 修改红包状态成功
+    @Override
+    public void onSuccessRedEnvelope(ChatMessage message) {
+        message.setToId(message.getFromId());
+        message.setFromId(SPUtils.getInstance().getString(Constant.SPKey_UID));
+        message.setBodyType(ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE_HINT);
+        SocketSendJson(GsonUtil.BeanToJson(message));
+        chatAdapter.setData(message);
+        toLastItem();
+    }
+
     @Override
     public void onSuccessNull() {
         smart_refresh.finishRefresh();
@@ -395,6 +408,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.iv_back) {
+            EmoticonsKeyboardUtils.closeSoftKeyboard(this);
             finish();
         }
     }
@@ -418,10 +432,16 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onClickRedEnvelope(ChatMessage message) {
-        if (message.getBodyType() == ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE &&
-                message.getMsgStatus() == ChatMessage.MSG_SEND_SUCCESS) {
+        String body = message.getBody();
+        if (message.getMsgStatus() != ChatMessage.STATUS_ALREADY_RECEIVED) {
+            showLoading();
+            getPresenter().updateEnvelope(message.getFromId(), message.getToId(), message.getPid());
+            RedEnvelopeBody envelopeBody = GsonUtil.GsonToBean(body, RedEnvelopeBody.class);
+            getPresenter().updateMoney(envelopeBody.getMoney());
             message.setMsgStatus(ChatMessage.STATUS_ALREADY_RECEIVED);
-            SocketSendJson(GsonUtil.BeanToJson(message));
+            chatAdapter.notifyChatMessage(message);
+        } else {
+            showToast("您已领取红包");
         }
 
     }

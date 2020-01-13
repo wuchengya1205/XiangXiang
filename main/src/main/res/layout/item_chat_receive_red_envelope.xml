@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
     android:layout_height="wrap_content">
 
@@ -24,29 +25,34 @@
         android:layout_marginRight="30dp"
         android:layout_height="wrap_content">
 
-        <com.xiang.lib.utils.SqureImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
             android:layout_width="45dp"
             android:background="@drawable/shape_cir"
             android:layout_marginTop="20dp"
+            app:corner_radius="6dp"
             android:layout_marginLeft="10dp"
             android:layout_height="45dp"/>
 
-        <ImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_red_envelope"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_marginRight="4dp"
             android:layout_marginLeft="8dp"
             android:scaleType="fitXY"
+            app:corner_radius="4dp"
             android:layout_toRightOf="@id/iv_icon"
             android:layout_alignTop="@id/iv_icon"
             android:src="@mipmap/icon_hb_cover"
-            android:layout_height="100dp"/>
+            android:layout_height="140dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:text="红包"
             android:textSize="12sp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="@drawable/shape_red_envelope_bg"
             android:layout_below="@id/iv_red_envelope"
             android:layout_alignLeft="@id/iv_red_envelope"
             android:layout_marginTop="4dp"

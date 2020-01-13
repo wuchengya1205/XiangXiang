@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:padding="6dp"
         android:textSize="14sp"
-        android:text="对方已领取你的红包"
+        android:text="对方领取了你的红包"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:textColor="@color/goldenrod"
