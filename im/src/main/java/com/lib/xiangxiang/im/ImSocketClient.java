@@ -1,9 +1,16 @@
 package com.lib.xiangxiang.im;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.xiang.lib.utils.Constant;
+import com.xiang.lib.utils.NetState;
+
+import org.greenrobot.eventbus.EventBus;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -13,7 +20,7 @@ import io.socket.emitter.Emitter;
  * author : fengzhangwei
  * date : 2019/12/19
  */
-public class ImSocketClient {
+public class ImSocketClient{
 
     private static String SocketEvent = "chat";
     private static Socket mSocket;
@@ -25,6 +32,25 @@ public class ImSocketClient {
     private static Emitter.Listener mConnectListener;     // 连接监听 / 成功
     private static Emitter.Listener mConnectErrorListener;// 连接错误
     private static Emitter.Listener mChatListener;        // 消息监听
+    private static Context mContext;
+    private static NetBroadcastReceiver netBroadcastReceiver;
+
+   static class NetBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "NetBroadcastReceiver changed");
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                Boolean netWorkState = NetState.hasNetWorkConnection(context);
+                Log.i(TAG,"---当前是否有网络---NetBroadcastReceiver:::::::" + netWorkState);
+                if (netWorkState){
+                    if (!checkSocket()){
+                        openSocket();
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * 判断Socket是否可以复用
@@ -39,6 +65,7 @@ public class ImSocketClient {
                 newSocket(context, token);
             } else {
                 Log.i(TAG, "-----复用Socket----");
+                openSocket();
             }
         } else {
             newSocket(context, token);
@@ -77,6 +104,7 @@ public class ImSocketClient {
     private static void closeSocket() {
         if (mSocket != null) {
             mSocket.disconnect();
+            mToken = null;
             Log.i(TAG, "Socket --- 链接已关闭.");
         }
     }
@@ -104,7 +132,8 @@ public class ImSocketClient {
                 mSocket.emit(SocketEvent, msg, new SocketSendMsgCallBackAck(context, msgId));
             }
         } else {
-            Log.i(TAG, "Socket is null");
+            Log.i(TAG, "Socket Connect Error");
+            initSocket(mToken,mContext);
         }
     }
 
@@ -115,6 +144,7 @@ public class ImSocketClient {
      * @param token
      */
     private static void newSocket(Context context, String token) {
+        mContext = context;
         mToken = token;
         IO.Options options = new IO.Options();
         options.forceNew = false;
@@ -153,13 +183,26 @@ public class ImSocketClient {
     private static void initSocketListener(final Context context) {
 
         mChatListener = new SocketChatMsgListener(context);
-
+        if (netBroadcastReceiver == null){
+            netBroadcastReceiver =  new NetBroadcastReceiver();
+        }
+        //实例化IntentFilter对象
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        //注册广播接收
+        context.getApplicationContext().registerReceiver(netBroadcastReceiver, filter);
         mDisConnectListener = new Emitter.Listener() {
 
             @Override
             public void call(Object... args) {
                 isConnect = false;
                 Log.i(TAG, "socket ---断开连接---");
+                if (mToken != null){
+                    EventBus.getDefault().postSticky("connect");
+                    if (NetState.hasNetWorkConnection(mContext)){
+                        openSocket();
+                    }
+                }
             }
         };
 
@@ -168,6 +211,7 @@ public class ImSocketClient {
             @Override
             public void call(Object... args) {
                 isConnect = true;
+                EventBus.getDefault().postSticky("connect");
                 Log.i(TAG, "socket ---连接成功---" + checkSocket());
             }
         };
@@ -177,12 +221,15 @@ public class ImSocketClient {
             @Override
             public void call(Object... args) {
                 isConnect = false;
+                if (NetState.hasNetWorkConnection(mContext)){
+                    openSocket();
+                }
+                EventBus.getDefault().postSticky("connect");
                 if (args.toString().isEmpty()) {
                     Log.i(TAG, "socket ---连接错误---" + args.toString());
                 } else {
                     Log.i(TAG, "socket ---连接错误---" + args[0].toString());
                 }
-
             }
         };
         addSocketListener();
@@ -205,9 +252,8 @@ public class ImSocketClient {
      *
      * @return
      */
-    private static Boolean checkSocket() {
+    public static Boolean checkSocket() {
         return mSocket != null && isConnect;
     }
-
 
 }

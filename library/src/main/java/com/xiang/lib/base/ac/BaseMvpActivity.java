@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -18,6 +19,7 @@ import com.xiang.lib.base.NetBroadcastReceiver;
 import com.xiang.lib.base.NetChangeListener;
 import com.xiang.lib.utils.ActivityUtils;
 import com.xiang.lib.utils.NetState;
+import com.zyq.easypermission.EasyPermissionHelper;
 
 import mvp.ljb.kt.contract.IPresenterContract;
 import mvp.ljb.kt.view.MvpActivity;
@@ -209,4 +211,11 @@ public abstract class BaseMvpActivity<P extends IPresenterContract> extends MvpA
     }
 
     protected abstract int getLayoutId();
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //使用EasyPermissionHelper注入回调
+        EasyPermissionHelper.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
 }

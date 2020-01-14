@@ -20,7 +20,7 @@ public class LoadingDialog extends Dialog {
     private View view;
 
     public LoadingDialog(@NonNull Context context, Boolean isBack) {
-        super(context);
+        super(context,R.style.custom_dialog);
         this.mIsBack = isBack;
         view = View.inflate(getContext(), R.layout.dialog_loading, null);
         setContentView(view);
@@ -29,7 +29,7 @@ public class LoadingDialog extends Dialog {
     }
 
     public LoadingDialog(@NonNull Context context, Boolean isBack,int view_id) {
-        super(context);
+        super(context,R.style.custom_dialog);
         this.mIsBack = isBack;
         view = View.inflate(getContext(), view_id, null);
         setContentView(view);

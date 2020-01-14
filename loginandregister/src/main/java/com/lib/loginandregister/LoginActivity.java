@@ -1,12 +1,15 @@
 package com.lib.loginandregister;
 
 
+import android.Manifest;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lib.loginandregister.contract.LoginContract;
@@ -14,9 +17,13 @@ import com.lib.loginandregister.presenter.LoginPresenter;
 import com.lib.net.HttpConfig;
 import com.xiang.lib.ARouterPath;
 import com.xiang.lib.application.BaseApplication;
-import com.xiang.lib.utils.Constant;
 import com.xiang.lib.base.ac.BaseMvpActivity;
+import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.SPUtils;
+import com.zyq.easypermission.EasyPermission;
+import com.zyq.easypermission.EasyPermissionResult;
+
+import java.util.List;
 
 @Route(path = ARouterPath.ROUTER_LOGIN)
 public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> implements LoginContract.IView, View.OnClickListener  {
@@ -60,6 +67,39 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
     @Override
     protected void onResume() {
         super.onResume();
+        if (EasyPermission
+                .build()
+                .hasPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            login();
+        }else {
+            arvixe();
+        }
+
+    }
+
+    private void arvixe() {
+        EasyPermission.build()
+                .mRequestCode(10010)
+                .mContext(this)
+                .mPerms(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+                .mResult(new EasyPermissionResult() {
+                    @Override
+                    public void onPermissionsAccess(int requestCode) {
+                        super.onPermissionsAccess(requestCode);
+                        login();
+                    }
+
+                    @Override
+                    public void onPermissionsDismiss(int requestCode, @NonNull List<String> permissions) {
+                        super.onPermissionsDismiss(requestCode, permissions);
+                        finish();
+                    }
+                }).requestPermission();
+    }
+
+    private void login() {
         showLoading();
         String m = SPUtils.getInstance().getString(Constant.SPKey_PHONE);
         String p = SPUtils.getInstance().getString(Constant.SPKey_PWD);
@@ -118,4 +158,5 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
                 .barAlpha(0.3f)  //状态栏和导航栏透明度，不写默认 0.0f
                 .init();
     }
+
 }
