@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xiang.main">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
         <activity
+            android:name=".act.RedEnvelopeActivity"
+            android:theme="@style/AppThemeRed" />
+        <activity
             android:name=".chat.ac.ChatActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".chat.ac.AttnInfoActivity"
             android:theme="@style/AppTheme" />

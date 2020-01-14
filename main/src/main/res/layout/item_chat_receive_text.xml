@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:chat="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
     android:layout_height="wrap_content">
 
@@ -24,26 +25,47 @@
         android:layout_marginRight="30dp"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
             android:layout_width="45dp"
+            android:background="@drawable/shape_cir"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            chat:corner_radius="6dp"
             android:layout_height="45dp"/>
 
-        <TextView
-            android:id="@+id/tv_content"
+
+        <com.cxd.chatview.moudle.ChatView
             android:layout_width="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="4dp"
+            chat:arrow_direction="left"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:padding="6dp"
-            android:textSize="14sp"
-            android:background="@drawable/shape_chat_text_receiver"
-            android:textColor="@color/black"
-            android:text="哈哈"
+            chat:arrow_up_distance = "4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:minWidth="50dp"
+            chat:arrow_width = "5dp"
+            chat:conner_radius = "4dp"
+            chat:arrow_height = "10dp"
+            chat:stroke_width = "0px"
+            chat:fill_color = "@color/white"
             android:layout_toRightOf="@id/iv_icon"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:padding="6dp"
+                android:textSize="14sp"
+                android:text="哈哈"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"/>
+
+        </com.cxd.chatview.moudle.ChatView>
+
+
 
     </RelativeLayout>
 

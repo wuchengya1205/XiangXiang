@@ -25,8 +25,8 @@
             app:iconNormal="@mipmap/icon_new_n"
             app:iconSelected="@mipmap/icon_new_y"
             app:itemText="新闻"
-            app:textColorNormal="@color/color_n"
-            app:textColorSelected="@color/color_y"
+            app:textColorNormal="@color/lightgray"
+            app:textColorSelected="@color/dodgerblue"
             app:itemTextSize="10sp" />
 
         <com.chaychan.library.BottomBarItem
@@ -36,8 +36,8 @@
             app:iconNormal="@mipmap/icon_video_n"
             app:iconSelected="@mipmap/icon_video_y"
             app:itemText="广场"
-            app:textColorNormal="@color/color_n"
-            app:textColorSelected="@color/color_y"
+            app:textColorNormal="@color/lightgray"
+            app:textColorSelected="@color/dodgerblue"
             app:itemTextSize="10sp" />
 
         <com.chaychan.library.BottomBarItem
@@ -47,8 +47,8 @@
             app:iconNormal="@mipmap/icon_chat_n"
             app:iconSelected="@mipmap/icon_chat_y"
             app:itemText="消息"
-            app:textColorNormal="@color/color_n"
-            app:textColorSelected="@color/color_y"
+            app:textColorNormal="@color/lightgray"
+            app:textColorSelected="@color/dodgerblue"
             app:itemTextSize="10sp" />
 
 <!--        <com.chaychan.library.BottomBarItem-->

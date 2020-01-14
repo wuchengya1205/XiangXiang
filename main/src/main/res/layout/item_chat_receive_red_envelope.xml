@@ -20,39 +20,44 @@
         android:layout_height="wrap_content"/>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_below="@id/tv_chat_time"
-        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_height="wrap_content">
+
         <com.shehuan.niv.NiceImageView
             android:id="@+id/iv_icon"
-            android:background="@drawable/shape_cir"
             android:layout_width="45dp"
+            android:background="@drawable/shape_cir"
+            android:layout_marginTop="20dp"
             app:corner_radius="6dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_height="45dp"/>
 
-        <ImageView
-            android:id="@+id/iv_emoji"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="10dp"
-            android:minHeight="60dp"
-            android:minWidth="60dp"
-            android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@id/iv_icon"
-            android:layout_height="wrap_content"/>
+        <com.shehuan.niv.NiceImageView
+            android:id="@+id/iv_red_envelope"
+            android:layout_width="100dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="8dp"
+            android:scaleType="fitXY"
+            app:corner_radius="4dp"
+            android:layout_toRightOf="@id/iv_icon"
+            android:layout_alignTop="@id/iv_icon"
+            android:src="@mipmap/icon_hb_cover"
+            android:layout_height="140dp"/>
 
-        <ProgressBar
-            android:id="@+id/pb_state"
-            android:layout_width="12dp"
-            android:layout_centerVertical="true"
-            android:indeterminateBehavior="repeat"
-            android:layout_marginLeft="4dp"
-            android:indeterminateDrawable="@drawable/anim"
-            android:layout_toLeftOf="@id/iv_emoji"
-            android:layout_height="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="红包"
+            android:textSize="12sp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="@drawable/shape_red_envelope_bg"
+            android:layout_below="@id/iv_red_envelope"
+            android:layout_alignLeft="@id/iv_red_envelope"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/goldenrod"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

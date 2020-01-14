@@ -2,6 +2,7 @@ package com.lib.xiangxiang.im;
 
 import com.xiang.lib.chatBean.ChatMessage;
 import com.xiang.lib.chatBean.ImageBody;
+import com.xiang.lib.chatBean.RedEnvelopeBody;
 import com.xiang.lib.chatBean.TextBody;
 import com.xiang.lib.utils.OfTenUtils;
 
@@ -79,6 +80,25 @@ public class ImSendMessageUtils {
             object.put("pid",getPid());
             object.put("bodyType",bodyType);
             object.put("body",GsonUtil.BeanToJson(new ImageBody(msg)));
+            object.put("msgStatus",ChatMessage.MSG_SEND_LOADING);
+            object.put("time",System.currentTimeMillis());
+            object.put("type", ChatMessage.MSG_SEND_CHAT);
+            object.put("conversation", OfTenUtils.getConviction(fromId,toId));
+            object.put("displaytime",displaytime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
+
+    public static String getChatMessageRedEnvelope(String money,String fromId,String toId,int bodyType,int displaytime){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("fromId",fromId);
+            object.put("toId",toId);
+            object.put("pid",getPid());
+            object.put("bodyType",bodyType);
+            object.put("body",GsonUtil.BeanToJson(new RedEnvelopeBody(money)));
             object.put("msgStatus",ChatMessage.MSG_SEND_LOADING);
             object.put("time",System.currentTimeMillis());
             object.put("type", ChatMessage.MSG_SEND_CHAT);

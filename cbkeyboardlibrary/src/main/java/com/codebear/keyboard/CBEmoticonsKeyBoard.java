@@ -328,7 +328,12 @@ public class CBEmoticonsKeyBoard extends AutoHeightLayout implements View.OnClic
                     reset();
                     return true;
                 } else {
-                    return super.dispatchKeyEvent(event);
+                    if (funFunction.isShown()){
+                        funFunction.hideAllFuncView();
+                        return true;
+                    }else {
+                        return super.dispatchKeyEvent(event);
+                    }
                 }
         }
         return super.dispatchKeyEvent(event);

@@ -7,16 +7,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shehuan.niv.NiceImageView;
 import com.xiang.main.R;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * author : fengzhangwei
  * date : 2019/12/27
  */
 public class ChatTextSendHolder extends RecyclerView.ViewHolder {
-    public CircleImageView iv_icon;
+    public NiceImageView iv_icon;
     public TextView tv_time;
     public TextView tv_content;
     public ProgressBar pb_state;

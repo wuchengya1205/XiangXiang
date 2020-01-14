@@ -1,6 +1,7 @@
 package com.xiang.main.chat.ac;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.codebear.keyboard.CBEmoticonsKeyBoard;
 import com.codebear.keyboard.data.AppFuncBean;
 import com.codebear.keyboard.data.EmoticonsBean;
+import com.codebear.keyboard.utils.EmoticonsKeyboardUtils;
 import com.codebear.keyboard.widget.CBAppFuncView;
 import com.codebear.keyboard.widget.CBEmoticonsView;
 import com.codebear.keyboard.widget.FuncLayout;
@@ -34,11 +37,13 @@ import com.xiang.lib.ARouterPath;
 import com.xiang.lib.allbean.LoginBean;
 import com.xiang.lib.base.ac.BaseMvpActivity;
 import com.xiang.lib.chatBean.ChatMessage;
+import com.xiang.lib.chatBean.RedEnvelopeBody;
 import com.xiang.lib.utils.Constant;
 import com.xiang.lib.utils.NetState;
 import com.xiang.lib.utils.OfTenUtils;
 import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.R;
+import com.xiang.main.act.RedEnvelopeActivity;
 import com.xiang.main.chat.adapter.ChatAdapter;
 import com.xiang.main.chat.contract.ChatContract;
 import com.xiang.main.chat.presenter.ChatPresenter;
@@ -53,6 +58,7 @@ import java.util.List;
 @Route(path = ARouterPath.ROUTER_CHAT)
 public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener, ChatAdapter.ChatItem {
 
+    private int REQUEST_CODE_RED_ENVELOPE = 123;
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
     private RecyclerView rv_chat;
@@ -61,7 +67,6 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private ChatAdapter chatAdapter;
     private TextView tv_chat_name;
     private TextView tv_net_state;
-    private Boolean rv_isLat = false;
     private int pageNo = 1;
     private int pageSize = 30;
     private String conviction;
@@ -104,7 +109,9 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void initBar() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_SHOW_BAR).init();
+        ImmersionBar.with(this)
+                .hideBar(BarHide.FLAG_SHOW_BAR)
+                .init();
     }
 
     @Override
@@ -115,7 +122,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         getPresenter().getUserInfo(to_uid);
         conviction = OfTenUtils.getConviction(SPUtils.getInstance().getString(Constant.SPKey_UID), to_uid);
         showLoading();
-        getPresenter().getHistory(conviction,pageNo,pageSize);
+        getPresenter().getHistory(conviction, pageNo, pageSize);
         smart_refresh.setOnRefreshListener(this);
         iv_back.setOnClickListener(this);
     }
@@ -126,45 +133,36 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         rv_chat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (cb_kb != null){
+                if (cb_kb != null) {
                     cb_kb.reset();
                 }
                 return false;
             }
         });
-        rv_chat.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            Boolean isToLast = false;
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-               LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //获取最后一个完全显示的ItemPosition
-                    int lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition();//从0开始
-                    int totalItemCount = layoutManager.getItemCount();
-                    // 判断是否滚动到底部，并且是向下滚动
-                    if (lastVisibleItem == (totalItemCount - 1) && isToLast ) {
-                        //加载更多功能的代码
-                        rv_isLat = true;
-                    }else {
-                        rv_isLat = false;
-                    }
-                }
-            }
 
+        rv_chat.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                isToLast = dy > 0;
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    rv_chat.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (chatAdapter.getItemCount() > 0) {
+                                rv_chat.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
 
     private void initOptions() {
         List<AppFuncBean> list = new ArrayList<>();
-        list.add(new AppFuncBean(111001101,R.mipmap.ic_launcher,"图片"));
-        list.add(new AppFuncBean(111001102,R.mipmap.ic_launcher,"视频"));
-        list.add(new AppFuncBean(111001103,R.mipmap.ic_launcher,"位置"));
+        list.add(new AppFuncBean(111001101, R.mipmap.icon_image, "图片"));
+        list.add(new AppFuncBean(111001102, R.mipmap.icon_video, "视频"));
+        list.add(new AppFuncBean(111001103, R.mipmap.icon_location, "位置"));
+        list.add(new AppFuncBean(111001104, R.mipmap.icon_hb, "红包"));
         CBAppFuncView appFuncView = new CBAppFuncView(this);
         appFuncView.setRol(3);
         appFuncView.setAppFuncBeanList(list);
@@ -173,15 +171,18 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             @Override
             public void onAppFunClick(AppFuncBean emoticon) {
                 int id = emoticon.getId();
-                switch (id){
+                switch (id) {
                     case 111001101:
                         break;
                     case 111001102:
                         break;
                     case 111001103:
                         break;
-                        default:
-                            break;
+                    case 111001104:
+                        goActivity(ARouterPath.ROUTER_RED_ENVELOPE, REQUEST_CODE_RED_ENVELOPE);
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -209,9 +210,9 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     }
 
     private void sendText(String input) {
-        if (!to_uid.isEmpty()){
+        if (!to_uid.isEmpty()) {
             String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
-            String json = ImSendMessageUtils.getChatMessageText(input,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_TEXT,chatAdapter.getLastItemDisplayTime());
+            String json = ImSendMessageUtils.getChatMessageText(input, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_TEXT, chatAdapter.getLastItemDisplayTime());
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
@@ -219,10 +220,21 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         }
     }
 
-    private void sendEmoji(String url){
-        if (!to_uid.isEmpty()){
+    private void sendEmoji(String url) {
+        if (!to_uid.isEmpty()) {
             String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
-            String json = ImSendMessageUtils.getChatMessageEmoji(url,from_uid,to_uid,ChatMessage.MSG_BODY_TYPE_EMOJI,chatAdapter.getLastItemDisplayTime());
+            String json = ImSendMessageUtils.getChatMessageEmoji(url, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_EMOJI, chatAdapter.getLastItemDisplayTime());
+            ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
+            chatAdapter.setData(message);
+            toLastItem();
+            SocketSendJson(json);
+        }
+    }
+
+    private void sendRedEnvelope(String money) {
+        if (!to_uid.isEmpty()) {
+            String from_uid = SPUtils.getInstance().getString(Constant.SPKey_UID);
+            String json = ImSendMessageUtils.getChatMessageRedEnvelope(money, from_uid, to_uid, ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE, chatAdapter.getLastItemDisplayTime());
             ChatMessage message = GsonUtil.GsonToBean(json, ChatMessage.class);
             chatAdapter.setData(message);
             toLastItem();
@@ -231,18 +243,18 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     }
 
 
-    private void SocketSendJson(String json){
-        SocketManager.sendMsgSocket(this,json,this);
+    private void SocketSendJson(String json) {
+        SocketManager.sendMsgSocket(this, json, this);
     }
 
-    private void toLastItem(){
-        chatAdapter.notifyItemChanged(chatAdapter.getItemCount()-1);
-        rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
+    private void toLastItem() {
+        chatAdapter.notifyItemChanged(chatAdapter.getItemCount() - 1);
+        rv_chat.scrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
     private void showPopWindow(View view) {
         RelativePopupWindow popupWindow = new RelativePopupWindow();
-        popupWindow.setContentView(View.inflate(this,R.layout.chat_pop,null));
+        popupWindow.setContentView(View.inflate(this, R.layout.chat_pop, null));
         popupWindow.setFocusable(true);
         popupWindow.showOnAnchor(view, RelativePopupWindow.VerticalPosition.ABOVE, RelativePopupWindow.HorizontalPosition.CENTER);
     }
@@ -286,7 +298,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void receiverMsg(ChatMessage msg) {
-        if (chatAdapter != null){
+        if (chatAdapter != null) {
             chatAdapter.setData(msg);
             toLastItem();
         }
@@ -294,26 +306,26 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void socketError(String msg) {
-        if (fl_socket_hint != null){
-            if (ImSocketClient.checkSocket()){
-                if (fl_socket_hint.getVisibility() == View.VISIBLE){
+        if (fl_socket_hint != null) {
+            if (ImSocketClient.checkSocket()) {
+                if (fl_socket_hint.getVisibility() == View.VISIBLE) {
                     fl_socket_hint.setVisibility(View.GONE);
                 }
                 List<ChatMessage> data = chatAdapter.getData();
                 int size = chatAdapter.getData().size();
-                for (int i=0;i<size;i++){
+                for (int i = 0; i < size; i++) {
                     ChatMessage message = data.get(i);
                     int msgStatus = message.getMsgStatus();
                     int bodyType = message.getBodyType();
-                    if (msgStatus != ChatMessage.MSG_SEND_SUCCESS){
-                        if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT){
+                    if (msgStatus != ChatMessage.MSG_SEND_SUCCESS) {
+                        if (bodyType == ChatMessage.MSG_BODY_TYPE_TEXT) {
                             String json = GsonUtil.BeanToJson(message);
                             SocketSendJson(json);
                         }
                     }
                 }
-            }else {
-                if (fl_socket_hint.getVisibility() == View.GONE){
+            } else {
+                if (fl_socket_hint.getVisibility() == View.GONE) {
                     fl_socket_hint.setVisibility(View.VISIBLE);
                 }
             }
@@ -330,7 +342,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     public void onSuccessInfo(LoginBean bean) {
         String json = SPUtils.getInstance().getString(Constant.SPKey_USERINFO);
         LoginBean from_bean = GsonUtil.GsonToBean(json, LoginBean.class);
-        if (chatAdapter == null){
+        if (chatAdapter == null) {
             chatAdapter = new ChatAdapter(new ArrayList<ChatMessage>(), this, from_bean.getImageUrl(), bean.getImageUrl());
         }
         rv_chat.setAdapter(chatAdapter);
@@ -344,20 +356,31 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         int size = list.size();
         smart_refresh.finishRefresh();
         dismissLoading();
-        if (size > 0){
+        if (size > 0) {
             chatAdapter.setData(list);
-            layoutManager.scrollToPositionWithOffset(list.size(),0);
+            layoutManager.scrollToPositionWithOffset(list.size(), 0);
         }
-        if (pageNo == 1){
+        if (pageNo == 1) {
             toLastItem();
         }
 
     }
 
+    // 修改红包状态成功
+    @Override
+    public void onSuccessRedEnvelope(ChatMessage message) {
+        message.setToId(message.getFromId());
+        message.setFromId(SPUtils.getInstance().getString(Constant.SPKey_UID));
+        message.setBodyType(ChatMessage.MSG_BODY_TYPE_RED_ENVELOPE_HINT);
+        SocketSendJson(GsonUtil.BeanToJson(message));
+        chatAdapter.setData(message);
+        toLastItem();
+    }
+
     @Override
     public void onSuccessNull() {
         smart_refresh.finishRefresh();
-        if (pageNo > 1){
+        if (pageNo > 1) {
             pageNo--;
         }
     }
@@ -365,13 +388,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onFuncPop(int height) {
-        if (chatAdapter.getData().size() > 0){
-            if (rv_isLat){
-                toLastItem();
-            }else {
-                rv_chat.scrollToPosition(chatAdapter.getItemCount()-1);
-            }
-        }
+
     }
 
     @Override
@@ -381,19 +398,21 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        if (chatAdapter.getData().size() > 0){
-            pageNo ++;
+        if (chatAdapter.getData().size() > 0) {
+            pageNo++;
         }
-        getPresenter().getHistory(conviction,pageNo,pageSize);
+        getPresenter().getHistory(conviction, pageNo, pageSize);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iv_back){
+        if (v.getId() == R.id.iv_back) {
+            EmoticonsKeyboardUtils.closeSoftKeyboard(this);
             finish();
         }
     }
 
+    // item 点击事件
     @Override
     public void onClickIcon(String url) {
 
@@ -401,12 +420,39 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     @Override
     public void onLongClickSend(View view) {
-        showPopWindow(view);
+        // showPopWindow(view);
     }
 
 
     @Override
     public void onLongClickReceive(View view) {
 
+    }
+
+    @Override
+    public void onClickRedEnvelope(ChatMessage message) {
+        String body = message.getBody();
+        if (message.getMsgStatus() != ChatMessage.STATUS_ALREADY_RECEIVED) {
+            showLoading();
+            getPresenter().updateEnvelope(message.getFromId(), message.getToId(), message.getPid());
+            RedEnvelopeBody envelopeBody = GsonUtil.GsonToBean(body, RedEnvelopeBody.class);
+            getPresenter().updateMoney(envelopeBody.getMoney());
+            message.setMsgStatus(ChatMessage.STATUS_ALREADY_RECEIVED);
+            chatAdapter.notifyChatMessage(message);
+        } else {
+            showToast("您已领取红包");
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_RED_ENVELOPE) {
+            if (resultCode == RedEnvelopeActivity.ok) {
+                String money = data.getStringExtra("money");
+                sendRedEnvelope(money);
+            }
+        }
     }
 }

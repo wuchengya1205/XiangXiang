@@ -32,6 +32,10 @@ public interface IHttpProtocol {
     @FormUrlEncoded
     Observable<BaseResponseTC<String>> upUserInfo(@FieldMap HashMap<String, Object> map);
 
+    @POST("updateRedEnvelope/user")
+    @FormUrlEncoded
+    Observable<BaseResponseTC<ChatMessage>> upRedEnvelope(@FieldMap HashMap<String, Object> map);
+
     @POST("all/user")
     @FormUrlEncoded
     Observable<BaseResponseTC<List<AttnBean>>> getAllAttn(@FieldMap HashMap<String, String> map);
