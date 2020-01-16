@@ -87,6 +87,10 @@ public class CBEmoticonsKeyBoard extends AutoHeightLayout implements View.OnClic
         return mInflater.inflate(R.layout.cb_view_app_func_default, null);
     }
 
+    protected View inflateVoice() {
+        return mInflater.inflate(R.layout.view_voice, null);
+    }
+
     public void setKeyBoardVisibility(int vis) {
         mRlBottomKeyboard.setVisibility(vis);
         mVLineBottom.setVisibility(vis);
@@ -136,7 +140,7 @@ public class CBEmoticonsKeyBoard extends AutoHeightLayout implements View.OnClic
     }
 
     protected void initVoiceFuncView() {
-        View keyboardView = inflateFunc();
+        View keyboardView = inflateVoice();
         funFunction.addFuncView(FUNC_TYPE_VOICE, keyboardView);
     }
 
