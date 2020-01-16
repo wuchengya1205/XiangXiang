@@ -83,6 +83,25 @@ public class FileUpLoadManager {
         sendRequest(muBuilder.build(), callBack);
     }
 
+    public void upLoadImageFile(String imagePath, final FileUpLoadCallBack callBack) {
+        MultipartBody.Builder muBuilder = new MultipartBody.Builder();
+        muBuilder.setType(MultipartBody.FORM);
+        File file = new File(imagePath);
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpg"), file);
+        ProgressRequestBody requestBody = new ProgressRequestBody(fileBody, new ProgressRequestListener() {
+            @Override
+            public void onRequestProgress(int pro, long contentLength, boolean done) {
+                Log.d("TAG", "pro=====" + pro );
+                if (callBack != null) {
+                    callBack.onProgress(pro, 0);
+                }
+            }
+        });
+        muBuilder.addFormDataPart(FileType_Image, file.getName(), requestBody);
+        Log.d("TAG", "参数设置完毕");
+        sendRequest(muBuilder.build(), callBack);
+    }
+
     public void upLoadVideoFile(List<String> imagePathList, final FileUpLoadCallBack callBack) {
         MultipartBody.Builder muBuilder = new MultipartBody.Builder();
         muBuilder.setType(MultipartBody.FORM);

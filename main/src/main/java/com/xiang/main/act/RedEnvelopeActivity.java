@@ -101,7 +101,7 @@ public class RedEnvelopeActivity extends BaseMvpActivity<RedEnvelopeContract.IPr
         dismissLoading();
         Intent intent = getIntent();
         intent.putExtra("money",String.valueOf(money));
-        setResult(ok,intent);
+        setResult(RESULT_OK,intent);
         finish();
     }
 

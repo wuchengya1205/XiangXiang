@@ -3,6 +3,7 @@ package com.xiang.main.chat.ac;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,6 +31,10 @@ import com.lib.xiangxiang.im.GsonUtil;
 import com.lib.xiangxiang.im.ImSendMessageUtils;
 import com.lib.xiangxiang.im.ImSocketClient;
 import com.lib.xiangxiang.im.SocketManager;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -43,10 +48,10 @@ import com.xiang.lib.utils.NetState;
 import com.xiang.lib.utils.OfTenUtils;
 import com.xiang.lib.utils.SPUtils;
 import com.xiang.main.R;
-import com.xiang.main.act.RedEnvelopeActivity;
 import com.xiang.main.chat.adapter.ChatAdapter;
 import com.xiang.main.chat.contract.ChatContract;
 import com.xiang.main.chat.presenter.ChatPresenter;
+import com.xiang.main.utils.FileUpLoadManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,7 +63,11 @@ import java.util.List;
 @Route(path = ARouterPath.ROUTER_CHAT)
 public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> implements ChatContract.IView, RecordIndicator.OnRecordListener, CBEmoticonsView.OnEmoticonClickListener, SocketManager.SendMsgCallBack, FuncLayout.OnFuncKeyBoardListener, OnRefreshListener, View.OnClickListener, ChatAdapter.ChatItem {
 
-    private int REQUEST_CODE_RED_ENVELOPE = 123;
+    private final int REQUEST_CODE_RED_ENVELOPE = 123;
+    private final int APP_FUNC_IMAGE = 123456780;
+    private final int APP_FUNC_VIDEO = 123456781;
+    private final int APP_FUNC_LOCATION =123456782;
+    private final int APP_FUNC_RED_ENVELOPE = 123456783;
     private CBEmoticonsKeyBoard cb_kb;
     private RecordIndicator recordIndicator;
     private RecyclerView rv_chat;
@@ -74,6 +83,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     private LinearLayoutManager layoutManager;
     private ImageView iv_back;
     private FrameLayout fl_socket_hint;
+    private FileUpLoadManager fileUpLoadManager;
 
     @Override
     protected int getLayoutId() {
@@ -117,6 +127,7 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     @Override
     public void initData() {
         super.initData();
+        fileUpLoadManager = new FileUpLoadManager();
         Bundle bundle = getIntent().getBundleExtra(BUNDLE);
         to_uid = bundle.getString(KEY_TO_UID);
         getPresenter().getUserInfo(to_uid);
@@ -159,10 +170,10 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
 
     private void initOptions() {
         List<AppFuncBean> list = new ArrayList<>();
-        list.add(new AppFuncBean(111001101, R.mipmap.icon_image, "图片"));
-        list.add(new AppFuncBean(111001102, R.mipmap.icon_video, "视频"));
-        list.add(new AppFuncBean(111001103, R.mipmap.icon_location, "位置"));
-        list.add(new AppFuncBean(111001104, R.mipmap.icon_hb, "红包"));
+        list.add(new AppFuncBean(APP_FUNC_IMAGE, R.mipmap.icon_image, "图片"));
+        list.add(new AppFuncBean(APP_FUNC_VIDEO, R.mipmap.icon_video, "视频"));
+        list.add(new AppFuncBean(APP_FUNC_LOCATION, R.mipmap.icon_location, "位置"));
+        list.add(new AppFuncBean(APP_FUNC_RED_ENVELOPE, R.mipmap.icon_hb, "红包"));
         CBAppFuncView appFuncView = new CBAppFuncView(this);
         appFuncView.setRol(3);
         appFuncView.setAppFuncBeanList(list);
@@ -172,13 +183,14 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
             public void onAppFunClick(AppFuncBean emoticon) {
                 int id = emoticon.getId();
                 switch (id) {
-                    case 111001101:
+                    case APP_FUNC_IMAGE:
+                        selectorPic();
                         break;
-                    case 111001102:
+                    case APP_FUNC_VIDEO:
                         break;
-                    case 111001103:
+                    case APP_FUNC_LOCATION:
                         break;
-                    case 111001104:
+                    case APP_FUNC_RED_ENVELOPE:
                         goActivity(ARouterPath.ROUTER_RED_ENVELOPE, REQUEST_CODE_RED_ENVELOPE);
                         break;
                     default:
@@ -186,6 +198,19 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
                 }
             }
         });
+    }
+
+    private void selectorPic() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .maxSelectNum(1)// 最大图片选择数量 int
+                .minSelectNum(1)// 最小选择数量 int
+                .imageSpanCount(4)// 每行显示个数 int
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .previewImage(true)// 是否可预览图片 true or false
+                .isCamera(true)// 是否显示拍照按钮 true or false
+                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
     private void initKeyBoard() {
@@ -449,10 +474,32 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_RED_ENVELOPE) {
-            if (resultCode == RedEnvelopeActivity.ok) {
+
+        if (resultCode == RESULT_OK){
+            List<LocalMedia> images;
+            if (requestCode == REQUEST_CODE_RED_ENVELOPE){
                 String money = data.getStringExtra("money");
                 sendRedEnvelope(money);
+            }
+            if (requestCode == PictureConfig.CHOOSE_REQUEST){
+                images = PictureSelector.obtainMultipleResult(data);
+                String path = images.get(0).getPath();
+                fileUpLoadManager.upLoadImageFile(path, new FileUpLoadManager.FileUpLoadCallBack() {
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String url) {
+                        Log.i("image","----------" + url);
+                    }
+
+                    @Override
+                    public void onProgress(int pro, int position) {
+                        Log.i("image","----pro------" + pro);
+                    }
+                });
             }
         }
     }
