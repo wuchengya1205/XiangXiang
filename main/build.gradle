@@ -18,6 +18,10 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
 
     buildTypes {
@@ -74,6 +78,7 @@ dependencies {
     /*第三方库*/
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //图库
+     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     // eventbus
     implementation 'org.greenrobot:eventbus:3.1.1'

@@ -1,10 +1,9 @@
 package com.xiang.main.fragment;
 
 import android.annotation.SuppressLint;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
+import com.gyf.barlibrary.BarHide;
 import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
@@ -15,7 +14,6 @@ import com.xiang.main.contract.MainFContract;
 import com.xiang.main.news.NewsFragment;
 import com.xiang.main.presenter.MainFPresenter;
 import com.xiang.main.video.VideoPageFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +46,13 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     @Override
     public void initView() {
         super.initView();
+    }
+
+    @Override
+    public void initBar() {
+        ImmersionBar.with(this)
+                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR) // 隐藏导航栏或者状态栏
+                .init();
         bottom_bar = view.findViewById(R.id.bottom_bar);
     }
 

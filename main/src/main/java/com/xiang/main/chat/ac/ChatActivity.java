@@ -374,7 +374,6 @@ public class ChatActivity extends BaseMvpActivity<ChatContract.IPresenter> imple
         tv_chat_name.setText(bean.getUsername());
         tv_net_state.setText(NetState.getNetState(bean.getOnline()));
         chatAdapter.setOnItemListener(this);
-
     }
 
     @Override

@@ -114,6 +114,7 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
     @Override
     public void onBannerClick(int position) {
 
+
     }
 
     @Override
