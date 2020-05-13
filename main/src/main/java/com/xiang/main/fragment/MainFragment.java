@@ -46,13 +46,6 @@ public class MainFragment extends BaseMvpFragment<MainFContract.IPresenter> impl
     @Override
     public void initView() {
         super.initView();
-    }
-
-    @Override
-    public void initBar() {
-        ImmersionBar.with(this)
-                .hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR) // 隐藏导航栏或者状态栏
-                .init();
         bottom_bar = view.findViewById(R.id.bottom_bar);
     }
 

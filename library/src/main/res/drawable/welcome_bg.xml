@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
         <color android:color="@color/colorPrimaryDark" />
@@ -10,8 +11,9 @@
             android:dither="true"
             android:filter="true"
             android:gravity="fill"
-            android:src="@drawable/icon_welcom"
-            android:tileMode="disabled" />
+            android:src="@drawable/welcome_bg"
+            android:tileMode="disabled"
+            tools:ignore="ResourceCycle" />
     </item>
 
 </layer-list>

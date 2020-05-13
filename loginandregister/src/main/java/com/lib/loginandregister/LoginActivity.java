@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -31,6 +32,7 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
     private EditText mobile;
     private EditText password;
     private Button btn_login;
+    private TextView tv_regs;
 
     @Override
     protected int getLayoutId() {
@@ -118,6 +120,7 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
         mobile = findViewById(R.id.ed_mobile);
         password = findViewById(R.id.ed_pwd);
         btn_login = findViewById(R.id.btn_login);
+        tv_regs = findViewById(R.id.tv_regs);
     }
 
     @Override
@@ -125,15 +128,17 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
         super.initData();
         HttpConfig.INSTANCE.init(Constant.BASE_TOMACT_URL, BaseApplication.getHeader(),BaseApplication.getParams(),true);
         btn_login.setOnClickListener(this);
+        tv_regs.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_login){
-//            getPresenter().login();
-            goActivity(ARouterPath.ROUTER_MAIN);
-            finish();
+            getPresenter().login();
+        }
+        if (v.getId() == R.id.tv_regs){
+            goActivity(RegisterActivity.class);
         }
     }
 
@@ -144,19 +149,6 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.IPresenter> imp
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void initBar() {
-        ImmersionBar.with(this)
-                .transparentStatusBar()  //透明状态栏，不写默认透明色
-                .hideBar(BarHide.FLAG_SHOW_BAR)
-                .transparentNavigationBar()  //透明导航栏，不写默认黑色(设置此方法，fullScreen()方法自动为 true)
-                .transparentBar()             //透明状态栏和导航栏，不写默认状态栏为透明色，导航栏为黑色（设置此方法，fullScreen()方法自动为 true）
-                .statusBarAlpha(0.3f)  //状态栏透明度，不写默认 0.0f
-                .navigationBarAlpha(0.2f)  //导航栏透明度，不写默认 0.0F
-                .barAlpha(0.3f)  //状态栏和导航栏透明度，不写默认 0.0f
-                .init();
     }
 
 }

@@ -46,6 +46,7 @@ dependencies {
     implementation project(path: ':library')
     implementation project(path: ':im')
     implementation project(path: ':cbkeyboardlibrary')
+    implementation project(path: ':locationlibrary')
     //组件
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
     //沉浸式

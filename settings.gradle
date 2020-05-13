@@ -1,2 +1,3 @@
 include ':app', ':loginandregister', ':main', ':im', 'library', ':CBEmotiosKBLibrary', ':cbkeyboardlibrary'
 rootProject.name='XiangXiang'
+include ':locationlibrary'

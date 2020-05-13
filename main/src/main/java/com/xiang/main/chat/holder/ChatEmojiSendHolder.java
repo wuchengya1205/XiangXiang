@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shehuan.niv.NiceImageView;
 import com.xiang.lib.utils.SqureImageView;
 import com.xiang.main.R;
 
@@ -16,7 +17,7 @@ import com.xiang.main.R;
  * date : 2019/12/27
  */
 public class ChatEmojiSendHolder extends RecyclerView.ViewHolder {
-    public SqureImageView iv_icon;
+    public NiceImageView iv_icon;
     public TextView tv_time;
     public ImageView iv_emoji;
     public ProgressBar pb_state;

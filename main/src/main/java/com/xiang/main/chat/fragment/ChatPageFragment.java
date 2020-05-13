@@ -1,7 +1,9 @@
 package com.xiang.main.chat.fragment;
 
 
+import android.Manifest;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.location.com.SendLocationActivity;
 import com.xiang.lib.base.fr.BaseMvpFragment;
 import com.xiang.lib.chatBean.ChatMessage;
 import com.xiang.main.R;
@@ -39,6 +42,7 @@ public class ChatPageFragment extends BaseMvpFragment<ChatPageContract.IPresente
     private ViewPager vp_chat;
     private List<String> list_title = new ArrayList<>();
     private List<Fragment> list_fragment = new ArrayList<>();
+    private Button btn_send_location;
 
     @Override
     protected int getLayoutId() {
@@ -51,6 +55,7 @@ public class ChatPageFragment extends BaseMvpFragment<ChatPageContract.IPresente
         EventBus.getDefault().register(this);
         tab_chat = view.findViewById(R.id.tab_chat);
         vp_chat = view.findViewById(R.id.vp_chat);
+        btn_send_location = view.findViewById(R.id.btn_send_location);
     }
 
     @Override
@@ -62,6 +67,7 @@ public class ChatPageFragment extends BaseMvpFragment<ChatPageContract.IPresente
         list_fragment.add(new ChatAttnFragment());
         vp_chat.setAdapter(new myAdapter(getChildFragmentManager()));
         tab_chat.setupWithViewPager(vp_chat);
+        btn_send_location.setOnClickListener(this);
     }
 
 
@@ -78,7 +84,9 @@ public class ChatPageFragment extends BaseMvpFragment<ChatPageContract.IPresente
 
     @Override
     public void onClick(View view) {
-
+        if (view.getId() == R.id.btn_send_location){
+            goActivity(SendLocationActivity.class);
+        }
     }
 
 

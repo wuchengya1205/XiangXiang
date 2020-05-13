@@ -6,9 +6,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application>
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/attrs" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.actions"-->
+<!--            android:resource="@xml/attrs" />-->
 
         <activity
             android:name=".act.RedEnvelopeActivity"

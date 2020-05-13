@@ -60,6 +60,15 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
         super.initData();
         initTabData();
         initBannerData();
+        startBanner();
+        mViewPager.setAdapter(new NewsTabAdapter(getChildFragmentManager()));
+        mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(this);
+        mTabLayout.addOnTabSelectedListener(this);
+        smart_refresh.setOnRefreshListener(this);
+    }
+
+    private void startBanner() {
         mBanner.initBanner(bannerData, false)//关闭3D画廊效果
                 .addPageMargin(20, 50)//参数1page之间的间距,参数2中间item距离边界的间距
                 .addPoint(bannerData.size() + 2)//添加指示器
@@ -68,24 +77,17 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
                 .addRoundCorners(5)//圆角
                 .finishConfig()//这句必须加
                 .addBannerListener(this);
-        mViewPager.setAdapter(new NewsTabAdapter(getChildFragmentManager()));
-        mTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.addOnPageChangeListener(this);
-        mTabLayout.addOnTabSelectedListener(this);
-        smart_refresh.setOnRefreshListener(this);
     }
 
     private void initBannerData() {
         bannerData.add("http://ww1.sinaimg.cn/large/0065oQSqly1g2pquqlp0nj30n00yiq8u.jpg");
         bannerData.add("https://ww1.sinaimg.cn/large/0065oQSqly1g2hekfwnd7j30sg0x4djy.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqly1g0ajj4h6ndj30sg11xdmj.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqly1fytdr77urlj30sg10najf.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqly1fymj13tnjmj30r60zf79k.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqgy1fy58bi1wlgj30sg10hguu.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqgy1fxno2dvxusj30sf10nqcm.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqgy1fxd7vcz86nj30qo0ybqc1.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqgy1fwyf0wr8hhj30ie0nhq6p.jpg");
-        bannerData.add("https://ws1.sinaimg.cn/large/0065oQSqgy1fwgzx8n1syj30sg15h7ew.jpg");
+        bannerData.add("http://ww1.sinaimg.cn/large/0065oQSqly1g2pquqlp0nj30n00yiq8u.jpg");
+        bannerData.add("https://ww1.sinaimg.cn/large/0065oQSqly1g2hekfwnd7j30sg0x4djy.jpg");
+        bannerData.add("http://ww1.sinaimg.cn/large/0065oQSqly1g2pquqlp0nj30n00yiq8u.jpg");
+        bannerData.add("https://ww1.sinaimg.cn/large/0065oQSqly1g2hekfwnd7j30sg0x4djy.jpg");
+        bannerData.add("http://ww1.sinaimg.cn/large/0065oQSqly1g2pquqlp0nj30n00yiq8u.jpg");
+        bannerData.add("https://ww1.sinaimg.cn/large/0065oQSqly1g2hekfwnd7j30sg0x4djy.jpg");
     }
 
     private void initTabData() {
@@ -99,6 +101,12 @@ public class NewsFragment extends BaseMvpFragment<NewsContract.IPresenter> imple
         tabData.add("科技");
         tabData.add("财经");
         tabData.add("时尚");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startBanner();
     }
 
     @Override

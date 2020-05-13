@@ -3,7 +3,12 @@
     package="com.lib.loginandregister">
 
     <application>
-        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/LoginTheme" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/LoginTheme" />
     </application>
 
 </manifest>

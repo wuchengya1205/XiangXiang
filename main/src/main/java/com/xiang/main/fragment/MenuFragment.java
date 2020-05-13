@@ -151,9 +151,4 @@ public class MenuFragment extends BaseMvpFragment<MenuContract.IPresenter> imple
     }
 
 
-    @Override
-    public void initBar() {
-        ImmersionBar.with(this).hideBar(BarHide.FLAG_HIDE_BAR).init();
-    }
-
 }
